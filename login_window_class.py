@@ -4,12 +4,39 @@ from PyQt5.QtGui import QFont, QPixmap
 
 import sys
 
+app = QApplication(sys.argv)
+
 class LoginPage(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(600, 400)
-        self.setStyleSheet("background-color: #003C43;")
         self.setWindowTitle("Login Page")
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #003C43;
+            }
+            QLineEdit {
+                background-color: #77B0AA;
+                border: None;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 14px;
+                margin-right: 30px;
+                font-weight: bold;
+            }
+            QPushButton {
+                color: #77B0AA;
+                border: 1px solid #77B0AA;
+                border-radius: 25px;
+                font-weight: bold;
+                margin-right: 20px;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                color: #003C43;
+                background-color: #77B0AA;
+            }
+        """)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
@@ -24,17 +51,7 @@ class LoginPage(QMainWindow):
         self.user_name_input.setFont(QFont("New Times Roman", 14))
         self.user_name_input.setPlaceholderText("Username")
         self.user_name_input.setMaxLength(30)
-        self.user_name_input.setStyleSheet("""
-            QLineEdit {
-                background-color: #77B0AA;
-                border: None;
-                border-radius: 20px;
-                padding: 10px;
-                font-size: 14px;
-                margin-right: 30px;
-                font-weight: bold;
-            }
-        """)
+
         self.grid.addWidget(self.user_name_input, 0, 1, 1, 2)
 
         self.password_label = QLabel("Password:", self)
@@ -46,36 +63,13 @@ class LoginPage(QMainWindow):
         self.password_input.setFont(QFont("New Times Roman", 14))
         self.password_input.setPlaceholderText("Password")
         self.password_input.setMaxLength(30)
-        self.password_input.setStyleSheet("""
-            QLineEdit {
-                background-color: #77B0AA;
-                border: None;
-                border-radius: 20px;
-                padding: 10px;
-                font-size: 14px;
-                margin-right: 30px;
-                font-weight: bold;
-            }
-        """)
+
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.grid.addWidget(self.password_input, 1, 1, 1, 2)
 
         self.submit_btn = QPushButton("Submit", self)
         self.submit_btn.setFixedSize(120, 50)
-        self.submit_btn.setStyleSheet("""
-            QPushButton {
-                color: #77B0AA;
-                border: 1px solid #77B0AA;
-                border-radius: 25px;
-                font-weight: bold;
-                margin-right: 20px;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                color: #003C43;
-                background-color: #77B0AA;
-            }
-       """)
+
         self.grid.addWidget(self.submit_btn, 2, 2)
 
         self.sign_up_label = QLabel("Don't have an account?", self)
@@ -87,38 +81,12 @@ class LoginPage(QMainWindow):
         self.sign_up_btn = QPushButton("Sign Up", self)
         self.sign_up_btn.setFixedSize(100, 50)
         self.sign_up_btn.setFont(QFont("New Times Roman", 8))
-        self.sign_up_btn.setStyleSheet("""
-            QPushButton {
-                color: #77B0AA;
-                border: 1px solid #77B0AA;
-                margin-left: 0;
-                border-radius: 25px;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                color: #003C43;
-                background-color: #77B0AA;
-            }
-        """)
+
         self.grid.addWidget(self.sign_up_btn, 2, 1)
 
         self.forget_password_btn = QPushButton("Forget Password", self)
         self.forget_password_btn.setFixedSize(170, 50)
-        self.forget_password_btn.setStyleSheet("""
-            QPushButton {
-                color: #77B0AA;
-                border: 1px solid #77B0AA;
-                border-radius: 25px;
-                margin-left: 10px;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                color: #003C43;
-                background-color: #77B0AA;
-            }
-        """)
+
         self.grid.addWidget(self.forget_password_btn, 3, 0)
 
         self.security_question_label = QLabel("your favorite color?", self)
@@ -129,17 +97,7 @@ class LoginPage(QMainWindow):
 
         self.security_question_input = QLineEdit(self)
         self.security_question_input.setPlaceholderText("color")
-        self.security_question_input.setStyleSheet("""
-            QLineEdit {
-                background-color: #77B0AA;
-                border: None;
-                border-radius: 20px;
-                padding: 10px;
-                font-size: 14px;
-                margin-right: 30px;
-                font-weight: bold;
-            }
-        """)
+
         self.grid.addWidget(self.security_question_input, 3, 2)
         self.security_question_input.setVisible(False)
 
@@ -163,3 +121,8 @@ class LoginPage(QMainWindow):
 
     def create_sign_up_window(self):
         print("SignUp")
+
+if __name__ =="__main__":
+    window = LoginPage()
+    window.show()
+    sys.exit(app.exec())

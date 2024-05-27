@@ -10,7 +10,23 @@ class StartWindow(QWidget):
         super().__init__()
         self.setFixedSize(400, 300)
         self.setWindowTitle("Start Window")
-        self.setStyleSheet("background-color: #003C43")
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #003C43;  
+            }
+            QPushButton {
+                border: None;
+                background-color: #76ABAE; 
+                border-radius: 8px; 
+                color: #EEEEEE;
+                font-size: 18px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #EEEEEE;
+                color: #003C43;
+            }
+        """)
         self.label = QLabel("Welcome to the app!", self)
         self.label.setGeometry(80, 50, 280, 50)
         self.label.setFont(QFont("Times New Roman", 18))
@@ -20,37 +36,11 @@ class StartWindow(QWidget):
         self.login_btn = QPushButton("Login", self)
         self.login_btn.setFixedSize(100, 35)
         self.login_btn.setFont(QFont("Times New Roman", 14))
-        self.login_btn.setStyleSheet("""
-            QPushButton {
-                border: None;
-                background-color: #76ABAE; 
-                border-radius: 8px; 
-                color: #EEEEEE;
-                font-size: 18px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #EEEEEE;
-                color: #003C43;
-            }
-        """)
+
         self.sign_up_btn = QPushButton("Sign Up", self)
         self.sign_up_btn.setFixedSize(100, 35)
         self.sign_up_btn.setFont(QFont("Times New Roman", 14))
-        self.sign_up_btn.setStyleSheet("""
-            QPushButton {
-                border: None;
-                background-color: #76ABAE; 
-                border-radius: 8px; 
-                color: #EEEEEE;
-                font-size: 18px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #EEEEEE;
-                color: #003C43;
-            }
-        """)
+
         self.hbox.addWidget(self.login_btn)
         self.hbox.addWidget(self.sign_up_btn)
         self.sign_up_btn.clicked.connect(self.create_sign_up_page)
@@ -61,8 +51,6 @@ class StartWindow(QWidget):
         
     def create_login_page(self):
         print("log in")
-
-
         
 
 window = StartWindow()
