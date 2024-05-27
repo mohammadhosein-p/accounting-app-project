@@ -1,0 +1,165 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdit, QGridLayout, QPushButton
+from PyQt5.QtGui import QFont, QPixmap
+
+import sys
+
+class LoginPage(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(600, 400)
+        self.setStyleSheet("background-color: #003C43;")
+        self.setWindowTitle("Login Page")
+
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+        self.grid = QGridLayout(central_widget)
+
+        self.user_name_label = QLabel("Username:", self)
+        self.user_name_label.setFont(QFont("New Times Roman", 14))
+        self.user_name_label.setStyleSheet("color: #E3FEF7; margin: 0 50px 0 20px")
+        self.grid.addWidget(self.user_name_label, 0, 0)
+        
+        self.user_name_input = QLineEdit(self)
+        self.user_name_input.setFont(QFont("New Times Roman", 14))
+        self.user_name_input.setPlaceholderText("Username")
+        self.user_name_input.setMaxLength(30)
+        self.user_name_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #77B0AA;
+                border: None;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 14px;
+                margin-right: 30px;
+                font-weight: bold;
+            }
+        """)
+        self.grid.addWidget(self.user_name_input, 0, 1, 1, 2)
+
+        self.password_label = QLabel("Password:", self)
+        self.password_label.setFont(QFont("New Times Roman", 14))
+        self.password_label.setStyleSheet("color: #E3FEF7; margin: 0 50px 0 20px")
+        self.grid.addWidget(self.password_label, 1, 0)
+
+        self.password_input = QLineEdit(self)
+        self.password_input.setFont(QFont("New Times Roman", 14))
+        self.password_input.setPlaceholderText("Password")
+        self.password_input.setMaxLength(30)
+        self.password_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #77B0AA;
+                border: None;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 14px;
+                margin-right: 30px;
+                font-weight: bold;
+            }
+        """)
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.grid.addWidget(self.password_input, 1, 1, 1, 2)
+
+        self.submit_btn = QPushButton("Submit", self)
+        self.submit_btn.setFixedSize(120, 50)
+        self.submit_btn.setStyleSheet("""
+            QPushButton {
+                color: #77B0AA;
+                border: 1px solid #77B0AA;
+                border-radius: 25px;
+                font-weight: bold;
+                margin-right: 20px;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                color: #003C43;
+                background-color: #77B0AA;
+            }
+       """)
+        self.grid.addWidget(self.submit_btn, 2, 2)
+
+        self.sign_up_label = QLabel("Don't have an account?", self)
+        self.sign_up_label.setFixedSize(200, 40)
+        self.sign_up_label.setFont(QFont("New Times Roman", 8))
+        self.sign_up_label.setStyleSheet("color: #E3FEF7; margin-left: 30px; margin-top: 5px;")
+        self.grid.addWidget(self.sign_up_label, 2, 0)
+
+        self.sign_up_btn = QPushButton("Sign Up", self)
+        self.sign_up_btn.setFixedSize(100, 50)
+        self.sign_up_btn.setFont(QFont("New Times Roman", 8))
+        self.sign_up_btn.setStyleSheet("""
+            QPushButton {
+                color: #77B0AA;
+                border: 1px solid #77B0AA;
+                margin-left: 0;
+                border-radius: 25px;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                color: #003C43;
+                background-color: #77B0AA;
+            }
+        """)
+        self.grid.addWidget(self.sign_up_btn, 2, 1)
+
+        self.forget_password_btn = QPushButton("Forget Password", self)
+        self.forget_password_btn.setFixedSize(170, 50)
+        self.forget_password_btn.setStyleSheet("""
+            QPushButton {
+                color: #77B0AA;
+                border: 1px solid #77B0AA;
+                border-radius: 25px;
+                margin-left: 10px;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                color: #003C43;
+                background-color: #77B0AA;
+            }
+        """)
+        self.grid.addWidget(self.forget_password_btn, 3, 0)
+
+        self.security_question_label = QLabel("your favorite color?", self)
+        self.security_question_label.setFont(QFont("New Times Roman", 10))
+        self.security_question_label.setStyleSheet("color: #E3FEF7; margin: 0 10px 0 10px")
+        self.grid.addWidget(self.security_question_label, 3, 1)
+        self.security_question_label.setVisible(False)
+
+        self.security_question_input = QLineEdit(self)
+        self.security_question_input.setPlaceholderText("color")
+        self.security_question_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #77B0AA;
+                border: None;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 14px;
+                margin-right: 30px;
+                font-weight: bold;
+            }
+        """)
+        self.grid.addWidget(self.security_question_input, 3, 2)
+        self.security_question_input.setVisible(False)
+
+
+        self.forget_password_btn.clicked.connect(self.show_security_question)
+        self.submit_btn.clicked.connect(self.login_check)
+        self.sign_up_btn.clicked.connect(self.create_sign_up_window)
+
+
+    def show_security_question(self):
+        self.security_question_input.setVisible(True)
+        self.security_question_label.setVisible(True)
+        self.forget_password_btn.setText("Check Password")
+        self.forget_password_btn.clicked.connect(self.forget_password_check)
+    
+    def forget_password_check(self):
+        print("checked")
+
+    def login_check(self):
+        print("Login")
+
+    def create_sign_up_window(self):
+        print("SignUp")
