@@ -3,6 +3,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
     QFormLayout, QComboBox, QDateEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
+import git
+from datetime import datetime
+today = datetime.today()
+qdate_today = QDate(today.year, today.month, today.day)
 
 
 class RecordIncome(QWidget):
@@ -40,8 +44,8 @@ class RecordIncome(QWidget):
         self.date_input.setDisplayFormat("yyyy-MM-dd")
         self.date_input.setLocale(QLocale(QLocale.English, QLocale.UnitedStates))
         self.date_input.setStyleSheet("background-color:#E3FEF7")
-        self.date_input.setMinimumDate(QDate(1920, 1, 1))
-        self.date_input.setMaximumDate(QDate(2005, 12, 31))
+        self.date_input.setMinimumDate(QDate(1970, 1, 1))
+        self.date_input.setMaximumDate(qdate_today)
 
         self.description_label = QLabel('Description of income :')
         self.description_label.setFont(font)
@@ -138,6 +142,7 @@ class RecordIncome(QWidget):
         """)
 
     def handle_submit(self):
+        record_type = "income"
         income = self.income_input.text()
         source = self.source_input.currentText()
         date = self.date_input.text()
@@ -145,7 +150,6 @@ class RecordIncome(QWidget):
         description = self.description_input.text()
 
         if not income or not date or source == "source of income" or type == "Type of income":
-            print("yeeeeees")
             QMessageBox.warning(self, 'Error', 'Please fill in all fields')
 
         elif not income.isnumeric() or float(income) < 0:
@@ -153,6 +157,8 @@ class RecordIncome(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your income has been registered')
+            transaction = git.Record(record_type, "mehdi", income, date, source, description)
+            git.accounting_manager.add_record(transaction)
             # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
 
