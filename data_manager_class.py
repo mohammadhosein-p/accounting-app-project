@@ -56,8 +56,13 @@ class DataManager():
         """)
 
     def is_user_exist(self, user:User):
-        result = self.cursor.execute("""SELECT * FROM users WHERE phone=? AND username=? AND email=?""", (user.phone, user.username, user.email))
-        return True if result.fetchone() else False
+        prams_to_check = ["phone", "username", "email"]
+        for pram in prams_to_check:
+            self.cursor.execute(f"SELECT * FROM users WHERE {pram}=? ", (getattr(user, pram), ))
+            result = self.cursor.fetchone()
+            if result:
+                return {"result": True, "duplicate": pram}
+        return {"result":False}
 
     def sign_up_user(self, user:User)->None:
         self.cursor.execute(
@@ -66,12 +71,20 @@ class DataManager():
         self.connection.commit()
 
     def log_in_user(self, user:User):
-        self.cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (user.username, user.password))
-        return self.cursor.fetchone()
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username, ))
+        result =  self.cursor.fetchone()
+        if result:
+            return {"result": True, "user_info": result} if result[5] == user.password else {"result": False, "error": "wrong password"}
+        else:
+            return {"result": False, "error": "username not found"}
 
     def find_password(self, user:User):
-        self.cursor.execute("SELECT * FROM users WHERE username=? AND security_question=?", (user.username, user.security))
-        return self.cursor.fetchone()[5]
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username ,))
+        result = self.cursor.fetchone()
+        if result:
+            return {"result": True, "password": result[5]} if result[8]==user.security else {"result": False, "error": "wrong security answer"}
+        else:
+            return {"result": False, "error": "username not found"}
 
 
 class AccountingManager():
@@ -87,25 +100,28 @@ class AccountingManager():
 
     def get_records_by_user(self, username):
         self.cursor.execute("SELECT * FROM accounting WHERE username=?", (username,))
-        return self.cursor.fetchall()
+        result = self.cursor.fetchall()
+        return {"result": True, "data": result} if result else {"result": False}
 
     def get_income_by_user(self, username):
         self.cursor.execute("SELECT * FROM accounting WHERE username=? AND type='income'", (username,))
-        return self.cursor.fetchall()
-
+        result = self.cursor.fetchall()
+        return {"result": True, "data": result} if result else {"result": False}
+    
     def get_expenses_by_user(self, username):
         self.cursor.execute("SELECT * FROM accounting WHERE username=? AND type='expense'", (username,))
-        return self.cursor.fetchall()
-
-if __name__ =="__main__":
-    data_manager = DataManager()
+        result = self.cursor.fetchall()
+        return {"result": True, "data": result} if result else {"result": False}
+    
+# if __name__ =="__main__":
+#     data_manager = DataManager()
    
-    # test commands
-    data_manager.sign_up_user(User("a", "b", "091521", "as", "asd", "qwerty", "asd", "asdf", "qe"))
-    print(data_manager.find_password(User(username="as", security="qe")))
-    print(data_manager.is_user_exist(User(phone="09", username="a", email="asd")))
-    print(data_manager.log_in_user(User(username="as", password="qwerty")))
-    accounting_manager = AccountingManager(data_manager.connection)
-    data_manager.sign_up_user(User("ali", "Doe", "09152541", "alidoe", "johrerg", "password123", "sdfg", "1990-01-01", "sdfvcx"))
-    accounting_manager.add_record(Record(username="alidoe", amount=1000.0, date="2024-05-28", source="salary", description="fhnfnfd", record_type="income"))
-    print(accounting_manager.get_records_by_user("alidoe"))
+#     # test commands
+#     data_manager.sign_up_user(User("a", "b", "091521", "as", "asd", "qwerty", "asd", "asdf", "qe"))
+#     print(data_manager.find_password(User(username="as", security="qe")))
+#     print(data_manager.is_user_exist(User(phone="09", username="a", email="asd")))
+#     print(data_manager.log_in_user(User(username="as", password="qwerty")))
+#     accounting_manager = AccountingManager(data_manager.connection)
+#     data_manager.sign_up_user(User("ali", "Doe", "09152541", "alidoe", "johrerg", "password123", "sdfg", "1990-01-01", "sdfvcx"))
+#     accounting_manager.add_record(Record(username="alidoe", amount=1000.0, date="2024-05-28", source="salary", description="fhnfnfd", record_type="income"))
+#     print(accounting_manager.get_records_by_user("alidoe"))

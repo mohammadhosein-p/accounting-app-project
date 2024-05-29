@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdit, QGridLayout, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdit, QGridLayout, QPushButton, QMessageBox
 from PyQt5.QtGui import QFont, QPixmap
-
+from data_manager_class import *
 import sys
 
 app = QApplication(sys.argv)
@@ -114,15 +114,26 @@ class LoginPage(QMainWindow):
         self.forget_password_btn.clicked.connect(self.forget_password_check)
     
     def forget_password_check(self):
-        print("checked")
+        response = data_manager.find_password(User(username=self.user_name_input.text(), security=self.security_question_input.text()))
+        if response['result']:
+            QMessageBox.information(self, "Info", "your password added")
+            self.password_input.setText(response['password'])
+        else:
+            QMessageBox.warning(self, "Error", response["error"])
+
 
     def login_check(self):
-        print("Login")
+        response = data_manager.log_in_user(User(username=self.user_name_input.text(), password=self.password_input.text()))
+        if response["result"]:
+            QMessageBox.information(self, "Info", f"you logged in as:\n{response['user_info']}")
+        else:
+            QMessageBox.warning(self, "Error", response["error"])
 
     def create_sign_up_window(self):
         print("SignUp")
 
 if __name__ =="__main__":
+    data_manager = DataManager()
     window = LoginPage()
     window.show()
     sys.exit(app.exec())
