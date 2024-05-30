@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
     QFormLayout, QComboBox, QDateEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
-import git
+import data_manager_class
 from datetime import datetime
 today = datetime.today()
 qdate_today = QDate(today.year, today.month, today.day)
@@ -33,8 +33,7 @@ class RecordIncome(QWidget):
         self.source_label = QLabel('source of income :')
         self.source_label.setFont(font)
         self.source_input = QComboBox()
-        self.source_input.addItems(
-            ["source of income", "Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz", "Behshahr", "Karaj", "Rasht"])
+        self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title()])
         self.source_input.setStyleSheet("background-color:#E3FEF7")
 
         self.date_label = QLabel('date of income :')
@@ -157,8 +156,8 @@ class RecordIncome(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your income has been registered')
-            transaction = git.Record(record_type, "mehdi", income, date, source, description)
-            git.accounting_manager.add_record(transaction)
+            transaction = data_manager_class.Record(record_type, "mehdi", income, date, source, description)
+            data_manager_class.accounting_manager.add_record(transaction)
             # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
 

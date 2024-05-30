@@ -61,6 +61,15 @@ class DataManager():
         );
         """)
 
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS categories (
+        username TEXT NOT NULL,
+        title TEXT NOT NULL,
+        description TEXT,
+        FOREIGN KEY(username) REFERENCES users(username)
+        );
+        """)
+
     def is_user_exist(self, user: User):
         global errors
         errors = []
@@ -89,14 +98,21 @@ class DataManager():
              user.security))
         self.connection.commit()
 
-    def log_in_user(self, user: User):
-        self.cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (user.username, user.password))
-        return self.cursor.fetchone()
+    def log_in_user(self, user:User):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username, ))
+        result =  self.cursor.fetchone()
+        if result:
+            return {"result": True, "user_info": result} if result[5] == user.password else {"result": False, "error": "wrong password"}
+        else:
+            return {"result": False, "error": "username not found"}
 
-    def find_password(self, user: User):
-        self.cursor.execute("SELECT * FROM users WHERE username=? AND security_question=?",
-                            (user.username, user.security))
-        return self.cursor.fetchone()[5]
+    def find_password(self, user:User):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username ,))
+        result = self.cursor.fetchone()
+        if result:
+            return {"result": True, "password": result[5]} if result[8]==user.security else {"result": False, "error": "wrong security answer"}
+        else:
+            return {"result": False, "error": "username not found"}
 
 
 class AccountingManager():
@@ -158,6 +174,32 @@ class AccountingManager():
 
         return z
 
+class CategoryManager():
+    def __init__(self, data_manager) -> None:
+        self.connection = data_manager.connection
+        self.cursor = self.connection.cursor()
+
+    def add_category(self, username, title, description):
+        self.cursor.execute(
+        """INSERT INTO categories (username, title, description) VALUES (?, ?, ?)""",
+        (username, title, description))
+        self.connection.commit()
+        return {"result" : True}
+
+    def find_category(self, title):
+        self.cursor.execute("SELECT * FROM categories WHERE title=?", (title,))
+        result = self.cursor.fetchone()
+        return {"result": True, "data": result} if result else {"result": False}
+
+    def edit_category(self, title, des):
+        self.cursor.execute(" UPDATE categories SET description = ? WHERE title = ?", (des, title))
+        self.connection.commit()
+        return {"result" : True}
+    
+    def all_catogory_title(self):
+        self.cursor.execute("SELECT title FROM categories WHERE username=? ",("username", ))
+        result = self.cursor.fetchall()
+        return result
 
 def days_between_today_and_date(target_date):
     target_date = datetime.strptime(target_date, "%Y-%m-%d")
@@ -168,6 +210,7 @@ def days_between_today_and_date(target_date):
 
 data_manager = DataManager()
 accounting_manager = AccountingManager(data_manager.connection)
+category_manager = CategoryManager(data_manager)
 
 # test commands
 # data_manager.sign_up_user(User("a", "b", "091521", "as", "asd", "qwerty", "asd", "asdf", "qe"))
