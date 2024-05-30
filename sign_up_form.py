@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
 from validator import Validator
-import git
+import data_manager_class
 
 
 class SignUpForm(QWidget):
@@ -219,12 +219,12 @@ class SignUpForm(QWidget):
             QMessageBox.warning(self, 'Error', 'Passwords do not match')
 
         else:
-            person = git.User(first_name, last_name, mobile, username, email, password, city, birthday, favorite_color)
-            git.data_manager.is_user_exist(person)
-            if git.errors:
-                QMessageBox.warning(self, 'Error', "\n".join(git.errors))
+            person = data_manager_class.User(first_name, last_name, mobile, username, email, password, city, birthday, favorite_color)
+            data_manager_class.data_manager.is_user_exist(person)
+            if data_manager_class.errors:
+                QMessageBox.warning(self, 'Error', "\n".join(data_manager_class.errors))
             else:
-                git.data_manager.sign_up_user(person)
+                data_manager_class.data_manager.sign_up_user(person)
                 QMessageBox.information(self, 'Success', f'Signed up as {first_name} {last_name}')
                 # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 

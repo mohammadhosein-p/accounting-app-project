@@ -19,13 +19,14 @@ class User():
 
 
 class Record():
-    def __init__(self, record_type, username="", amount=0, date="", source="", description="") -> None:
+    def __init__(self, record_type, username="", amount=0, date="", source="", description="", cost_type="") -> None:
         self.record_type = record_type
         self.username = username
         self.amount = amount
         self.date = date
         self.source = source
         self.description = description
+        self.cost_type = cost_type
 
 
 class DataManager():
@@ -56,6 +57,7 @@ class DataManager():
         date TEXT NOT NULL,
         source TEXT NOT NULL,
         description TEXT NOT NULL,
+        cost_type TEXT NOT NULL,
         type TEXT NOT NULL CHECK(type IN ('income', 'expense')),
         FOREIGN KEY(username) REFERENCES users(username)
         );
@@ -122,14 +124,14 @@ class AccountingManager():
 
     def add_record(self, record: Record):
         self.cursor.execute(
-            """INSERT INTO accounting (username, amount, date, source, description, type) VALUES (?, ?, ?, ?, ?, ?)""",
-            (record.username, record.amount, record.date, record.source, record.description, record.record_type))
+            """INSERT INTO accounting (username, amount, date, source, description, cost_type, type) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (record.username, record.amount, record.date, record.source, record.description, record.cost_type, record.record_type))
         self.connection.commit()
 
     def add_recordd(self, record: Record):
         self.cursor.execute(
-            """INSERT INTO accounting (username, amount, date, source, description, type) VALUES (?, ?, ?, ?, ?, ?)""",
-            (record.username, record.amount, record.date, record.source, record.description, record.record_type))
+            """INSERT INTO accounting (username, amount, date, source, description, cost_type, type) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (record.username, record.amount, record.date, record.source, record.description, record.cost_type, record.record_type))
         self.connection.commit()
 
     def get_records_by_user(self, username):
@@ -173,6 +175,13 @@ class AccountingManager():
                 z.append(i)
 
         return z
+    
+    def search_records(self, form_data):
+        self.cursor.execute(' SELECT * FROM accounting WHERE amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ', (form_data['min_price'], form_data['max_price'],
+        form_data['data_type'], form_data["record_type"]))
+        records = self.cursor.fetchall()
+        return [record for record in records if form_data["start_date"] < datetime.strptime(record[2], '%Y-%m-%d') < form_data["end_date"] ]
+
 
 class CategoryManager():
     def __init__(self, data_manager) -> None:

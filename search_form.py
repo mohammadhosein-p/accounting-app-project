@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
     QComboBox, QTableWidget, QTableWidgetItem, QFormLayout, QSpinBox, QMessageBox, QButtonGroup
 from PyQt5.QtGui import QIcon, QFont
 from math import inf
-import git
+import data_manager_class
 from PyQt5.QtCore import Qt
 
 
@@ -181,7 +181,7 @@ class SearchFilterApp(QWidget):
         elif is_yearly:
             time_limit = 365
 
-        nat = git.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
+        nat = data_manager_class.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
                                                    list_of_field, time_limit)
         print(nat)
 

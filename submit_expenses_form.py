@@ -155,7 +155,8 @@ class RecordExpenses(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your expenses has been registered')
-            transaction = data_manager_class.Record(record_type, "mehdi", expenses, date, source, description)
+            transaction = data_manager_class.Record(record_type=record_type, username="mehdi",
+                amount=expenses, date=date, source=source, description=description, cost_type=type)
             data_manager_class.accounting_manager.add_recordd(transaction)
             # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
