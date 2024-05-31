@@ -73,10 +73,7 @@ class ButtonApp(QWidget):
         QMessageBox.information(self, 'Success', 'goodbye')
 
     def handle_editing_information(self):
-        # app = QApplication(sys.argv)
-        signup_form = test4.SignUpForm()
-        signup_form.show()
-        # sys.exit(app.exec_())
+        pass
 
     def handle_excavating_information(self):
         pass
