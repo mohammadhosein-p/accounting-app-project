@@ -20,10 +20,8 @@ class RecordIncome(QWidget):
         self.setGeometry(700, 200, 550, 500)
         self.setFixedSize(580, 480)
 
-        # Set font for labels
         font = QFont('Times New Roman', 12)
 
-        # Create widgets
         self.income_label = QLabel('Income :')
         self.income_label.setFont(font)
         self.income_input = QLineEdit()
@@ -80,7 +78,6 @@ class RecordIncome(QWidget):
         layout.addWidget(self.submit_button)
         self.setLayout(layout)
 
-        # Set stylesheet with the provided color palette and rounded borders
         self.setStyleSheet("""
             QWidget {
                 background-color: #003C43;
@@ -158,7 +155,6 @@ class RecordIncome(QWidget):
             QMessageBox.information(self, 'Success', 'Your income has been registered')
             transaction = data_manager_class.Record(record_type, "mehdi", income, date, source, description)
             data_manager_class.accounting_manager.add_record(transaction)
-            # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
 
 if __name__ == '__main__':

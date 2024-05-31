@@ -14,14 +14,12 @@ class SignUpForm(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Sign Up Form')
-        self.setWindowIcon(QIcon('add-user.png'))  # Optional: Set an icon for the window
+        self.setWindowIcon(QIcon('add-user.png'))
         self.setGeometry(700, 200, 550, 500)
         self.setFixedSize(580, 780)
 
-        # Set font for labels
         font = QFont('Times New Roman', 12)
 
-        # Create widgets
         self.first_name_label = QLabel('First Name :')
         self.first_name_label.setFont(font)
         self.first_name_input = QLineEdit()
@@ -96,7 +94,6 @@ class SignUpForm(QWidget):
 
         self.empty_label = QLabel('')
 
-        # Set layout
         layout = QFormLayout()
         layout.addRow(self.first_name_label, self.first_name_input)
         layout.addRow(self.empty_label)
@@ -123,7 +120,6 @@ class SignUpForm(QWidget):
 
         self.setLayout(layout)
 
-        # Set stylesheet with the provided color palette and rounded borders
         self.setStyleSheet("""
             QWidget {
                 background-color: #003C43;
@@ -226,7 +222,6 @@ class SignUpForm(QWidget):
             else:
                 data_manager_class.data_manager.sign_up_user(person)
                 QMessageBox.information(self, 'Success', f'Signed up as {first_name} {last_name}')
-                # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
 
 if __name__ == '__main__':

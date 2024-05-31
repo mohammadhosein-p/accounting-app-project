@@ -76,17 +76,14 @@ class DataManager():
         global errors
         errors = []
 
-        # Check if phone number already exists
         phone_result = self.cursor.execute("""SELECT * FROM users WHERE phone=?""", (user.phone,))
         if phone_result.fetchone():
             errors.append("Phone number already exists")
 
-        # Check if email already exists
         email_result = self.cursor.execute("""SELECT * FROM users WHERE email=?""", (user.email,))
         if email_result.fetchone():
             errors.append("Email already exists")
 
-        # Check if username already exists
         username_result = self.cursor.execute("""SELECT * FROM users WHERE username=?""", (user.username,))
         if username_result.fetchone():
             errors.append("Username already exists")
@@ -158,24 +155,23 @@ class AccountingManager():
         self.cursor.execute(query, parameters)
         results = self.cursor.fetchall()
 
-        # return results
-        filtered_results = []
-        z = []
-        for i in range(len(results)):
-            for j in results[i]:
+        primary_filter = []
+        secondary_filter = []
+        for Tuple in range(len(results)):
+            for member in results[Tuple]:
                 if list_of_field[0] == "*":
-                    if search_term == j:
-                        filtered_results.append(results[i])
+                    if search_term == member:
+                        primary_filter.append(results[Tuple])
                 else:
-                    if search_term == j and search_term == results1[i][0]:
-                        filtered_results.append(results[i])
+                    if search_term == member and search_term == results1[Tuple][0]:
+                        primary_filter.append(results[Tuple])
 
-        for i in filtered_results:
-            if days_between_today_and_date(i[2]) <= time_limit:
-                z.append(i)
+        for Tuple in primary_filter:
+            if days_between_today_and_date(Tuple[2]) <= time_limit:
+                secondary_filter.append(Tuple)
 
-        return z
-    
+        return secondary_filter
+
     def search_records(self, form_data):
         self.cursor.execute(' SELECT * FROM accounting WHERE amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ', (form_data['min_price'], form_data['max_price'],
         form_data['data_type'], form_data["record_type"]))

@@ -5,8 +5,10 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
 import data_manager_class
 from datetime import datetime
+
 today = datetime.today()
 qdate_today = QDate(today.year, today.month, today.day)
+
 
 class RecordExpenses(QWidget):
     def __init__(self):
@@ -19,10 +21,8 @@ class RecordExpenses(QWidget):
         self.setGeometry(700, 200, 550, 500)
         self.setFixedSize(580, 480)
 
-        # Set font for labels
         font = QFont('Times New Roman', 12)
 
-        # Create widgets
         self.expenses_label = QLabel('expenses :')
         self.expenses_label.setFont(font)
         self.expenses_input = QLineEdit()
@@ -32,7 +32,8 @@ class RecordExpenses(QWidget):
         self.source_label = QLabel('source of expenses :')
         self.source_label.setFont(font)
         self.source_input = QComboBox()
-        self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title()])
+        self.source_input.addItems(
+            [category[0] for category in data_manager_class.category_manager.all_catogory_title()])
         self.source_input.setStyleSheet("background-color:#E3FEF7")
 
         self.date_label = QLabel('date of expenses :')
@@ -79,7 +80,6 @@ class RecordExpenses(QWidget):
         layout.addWidget(self.submit_button)
         self.setLayout(layout)
 
-        # Set stylesheet with the provided color palette and rounded borders
         self.setStyleSheet("""
             QWidget {
                 background-color: #003C43;
@@ -156,9 +156,9 @@ class RecordExpenses(QWidget):
         else:
             QMessageBox.information(self, 'Success', 'Your expenses has been registered')
             transaction = data_manager_class.Record(record_type=record_type, username="mehdi",
-                amount=expenses, date=date, source=source, description=description, cost_type=type)
+                                                    amount=expenses, date=date, source=source, description=description,
+                                                    cost_type=type)
             data_manager_class.accounting_manager.add_recordd(transaction)
-            # Here you can add more logic to handle the sign up process (e.g., saving the user information)
 
 
 if __name__ == '__main__':

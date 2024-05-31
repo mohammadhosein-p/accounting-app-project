@@ -1,23 +1,23 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QCheckBox, \
-    QComboBox, QTableWidget, QTableWidgetItem, QFormLayout, QSpinBox, QMessageBox, QButtonGroup
-from PyQt5.QtGui import QIcon, QFont
+    QComboBox, QSpinBox, QMessageBox, QButtonGroup, QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QLocale
 from math import inf
-import data_manager_class
-from PyQt5.QtCore import Qt
+import git
 
 
 class SearchFilterApp(QWidget):
     def __init__(self):
         super().__init__()
+        self.setFixedSize(905, 700)
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('Search and Filter')
-        self.setWindowIcon(QIcon('search.png'))  # Optional: Set an icon for the window
+        self.setWindowIcon(QIcon('search.png'))
         self.setGeometry(700, 200, 800, 600)
 
-        # Create widgets
         self.search_label = QLabel('Search:')
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Enter search term")
@@ -25,7 +25,6 @@ class SearchFilterApp(QWidget):
         self.search_button = QPushButton('Search')
         self.search_button.clicked.connect(self.handle_search)
 
-        # Filters
         self.day_checkbox = QCheckBox('Daily')
         self.month_checkbox = QCheckBox('Monthly')
         self.year_checkbox = QCheckBox('Yearly')
@@ -34,7 +33,6 @@ class SearchFilterApp(QWidget):
         self.expense_checkbox = QCheckBox('Expense')
         self.expense_checkbox.setChecked(True)
 
-        # Grouping day, month, year checkboxes to allow only one selection at a time
         self.time_group = QButtonGroup(self)
         self.time_group.addButton(self.day_checkbox)
         self.time_group.addButton(self.month_checkbox)
@@ -44,19 +42,21 @@ class SearchFilterApp(QWidget):
         self.amount_min_label = QLabel('Min Amount:')
         self.amount_min_input = QSpinBox()
         self.amount_min_input.setMaximum(1000000000)
+        self.amount_min_input.setLocale(QLocale(QLocale.English, QLocale.UnitedStates))
 
         self.amount_max_label = QLabel('Max Amount:')
         self.amount_max_input = QSpinBox()
         self.amount_max_input.setMaximum(1000000000)
         self.amount_max_input.setValue(1000000000)
+        self.amount_max_input.setLocale(QLocale(QLocale.English, QLocale.UnitedStates))
 
         self.field_combo = QComboBox()
         self.field_combo.addItems(['All Fields', 'Description', 'Source', 'Type'])
 
-        # Results table
         self.results_table = QTableWidget()
-        self.results_table.setColumnCount(6)
-        self.results_table.setHorizontalHeaderLabels(['ID', 'Date', 'Type', 'Amount', 'Description', 'Source'])
+        self.results_table.setColumnCount(7)
+        self.results_table.setHorizontalHeaderLabels(
+            ['Name', 'Amount', 'Date', 'source', 'Description', 'Type', 'Transaction type'])
 
         # Layouts
         search_layout = QHBoxLayout()
@@ -90,7 +90,6 @@ class SearchFilterApp(QWidget):
 
         self.setLayout(main_layout)
 
-        # Apply stylesheet
         self.apply_stylesheet()
 
     def apply_stylesheet(self):
@@ -98,12 +97,11 @@ class SearchFilterApp(QWidget):
             QWidget {
                 background-color: #003C43;
                 color: #E3FEF7;
-                font-family: 'Arial';
-                font-size: 14px;
+                font-family: 'Times New Roman';
+                font-size: 16px;
             }
             QLabel {
                 color: #E3FEF7;
-                font-weight: bold;
             }
             QLineEdit, QComboBox, QSpinBox {
                 border: 2px solid #135D66;
@@ -113,7 +111,7 @@ class SearchFilterApp(QWidget):
                 color: #003C43;
             }
             QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
-                border: 2px solid #77B0AA;
+                border: 2px solid red;
             }
             QCheckBox {
                 padding: 5px;
@@ -121,7 +119,7 @@ class SearchFilterApp(QWidget):
             }
             QPushButton {
                 background-color: #77B0AA;
-                color: #003C43;
+                color: white;
                 padding: 10px;
                 border-radius: 10px;
                 font-size: 16px;
@@ -147,7 +145,6 @@ class SearchFilterApp(QWidget):
 
     def handle_search(self):
         list_of_type = []
-        list_of_field = []
         time_limit = inf
 
         search_term = self.search_input.text()
@@ -181,10 +178,18 @@ class SearchFilterApp(QWidget):
         elif is_yearly:
             time_limit = 365
 
-        nat = data_manager_class.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
-                                                   list_of_field, time_limit)
-        print(nat)
+        search_object = git.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
+                                                         list_of_field, time_limit)
+        if len(search_object) == 0:
+            QMessageBox.warning(self, 'Error', 'This word not found')
+        else:
+            self.update_results_table(search_object)
 
+    def update_results_table(self, results):
+        self.results_table.setRowCount(len(results))
+        for row_idx, row_data in enumerate(results):
+            for col_idx, item in enumerate(row_data):
+                self.results_table.setItem(row_idx, col_idx, QTableWidgetItem(str(item)))
 
 
 if __name__ == '__main__':
