@@ -2,6 +2,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
 import git
+import sign_up_form
+from datetime import datetime
 
 
 class ButtonApp(QWidget):
@@ -45,7 +47,7 @@ class ButtonApp(QWidget):
             QWidget {
                 background: #003C43;
                 color: #E3FEF7;
-                font-family: 'Arial';
+                font-family: 'Times New Roman';
                 font-size: 14px;
             }
             QPushButton {
@@ -73,7 +75,27 @@ class ButtonApp(QWidget):
         QMessageBox.information(self, 'Success', 'goodbye')
 
     def handle_editing_information(self):
-        pass
+
+        editor = git.accounting_manager.edit_information("mehdi")
+        self.ui = sign_up_form.SignUpForm()
+
+        self.ui.signup_button.setText("CONFIRM")
+        self.ui.setWindowTitle("Editing form")
+
+        self.ui.first_name_input.setText(f"{editor[0][0]}")
+        self.ui.last_name_input.setText(f"{editor[0][1]}")
+        self.ui.mobile_input.setText(f"{editor[0][2]}")
+        self.ui.email_input.setText(f"{editor[0][4]}")
+        self.ui.username_input.setText(f"{editor[0][3]}")
+        self.ui.username_input.setEnabled(False)
+        initial_date = datetime.strptime(editor[0][7], "%Y-%m-%d")
+        self.ui.birthdate_input.setDate(initial_date)
+        self.ui.city_input.setCurrentText(f"{editor[0][6]}")
+        self.ui.favorite_color_input.setText(f"{editor[0][8]}")
+        self.ui.password_input.setText(f"{editor[0][5]}")
+        self.ui.confirm_password_input.setText(f"{editor[0][5]}")
+
+        self.ui.show()
 
     def handle_excavating_information(self):
         pass

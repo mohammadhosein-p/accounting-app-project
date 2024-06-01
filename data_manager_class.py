@@ -97,19 +97,21 @@ class DataManager():
              user.security))
         self.connection.commit()
 
-    def log_in_user(self, user:User):
-        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username, ))
-        result =  self.cursor.fetchone()
+    def log_in_user(self, user: User):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username,))
+        result = self.cursor.fetchone()
         if result:
-            return {"result": True, "user_info": result} if result[5] == user.password else {"result": False, "error": "wrong password"}
+            return {"result": True, "user_info": result} if result[5] == user.password else {"result": False,
+                                                                                             "error": "wrong password"}
         else:
             return {"result": False, "error": "username not found"}
 
-    def find_password(self, user:User):
-        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username ,))
+    def find_password(self, user: User):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (user.username,))
         result = self.cursor.fetchone()
         if result:
-            return {"result": True, "password": result[5]} if result[8]==user.security else {"result": False, "error": "wrong security answer"}
+            return {"result": True, "password": result[5]} if result[8] == user.security else {"result": False,
+                                                                                               "error": "wrong security answer"}
         else:
             return {"result": False, "error": "username not found"}
 
@@ -122,13 +124,15 @@ class AccountingManager():
     def add_record(self, record: Record):
         self.cursor.execute(
             """INSERT INTO accounting (username, amount, date, source, description, cost_type, type) VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (record.username, record.amount, record.date, record.source, record.description, record.cost_type, record.record_type))
+            (record.username, record.amount, record.date, record.source, record.description, record.cost_type,
+             record.record_type))
         self.connection.commit()
 
     def add_recordd(self, record: Record):
         self.cursor.execute(
             """INSERT INTO accounting (username, amount, date, source, description, cost_type, type) VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (record.username, record.amount, record.date, record.source, record.description, record.cost_type, record.record_type))
+            (record.username, record.amount, record.date, record.source, record.description, record.cost_type,
+             record.record_type))
         self.connection.commit()
 
     def get_records_by_user(self, username):
@@ -173,10 +177,28 @@ class AccountingManager():
         return secondary_filter
 
     def search_records(self, form_data):
-        self.cursor.execute(' SELECT * FROM accounting WHERE amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ', (form_data['min_price'], form_data['max_price'],
-        form_data['data_type'], form_data["record_type"]))
+        self.cursor.execute(' SELECT * FROM accounting WHERE amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ',
+                            (form_data['min_price'], form_data['max_price'],
+                             form_data['data_type'], form_data["record_type"]))
         records = self.cursor.fetchall()
-        return [record for record in records if form_data["start_date"] < datetime.strptime(record[2], '%Y-%m-%d') < form_data["end_date"] ]
+        return [record for record in records if
+                form_data["start_date"] < datetime.strptime(record[2], '%Y-%m-%d') < form_data["end_date"]]
+
+    def delete_account(self, username):
+        self.cursor.execute("DELETE FROM users WHERE username = ?;", (username,))
+        self.cursor.execute("DELETE FROM accounting WHERE username = ?;", (username,))
+        self.connection.commit()
+
+    def delete_records(self, username, type):
+        self.cursor.execute("DELETE FROM accounting WHERE username = ? AND type = ?;", (username, type))
+        self.connection.commit()
+
+    def edit_information(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        information = self.cursor.fetchall()
+        self.cursor.execute("DELETE FROM users WHERE username = ?;", (username,))
+        self.connection.commit()
+        return information
 
 
 class CategoryManager():
@@ -186,10 +208,10 @@ class CategoryManager():
 
     def add_category(self, username, title, description):
         self.cursor.execute(
-        """INSERT INTO categories (username, title, description) VALUES (?, ?, ?)""",
-        (username, title, description))
+            """INSERT INTO categories (username, title, description) VALUES (?, ?, ?)""",
+            (username, title, description))
         self.connection.commit()
-        return {"result" : True}
+        return {"result": True}
 
     def find_category(self, title):
         self.cursor.execute("SELECT * FROM categories WHERE title=?", (title,))
@@ -199,12 +221,13 @@ class CategoryManager():
     def edit_category(self, title, des):
         self.cursor.execute(" UPDATE categories SET description = ? WHERE title = ?", (des, title))
         self.connection.commit()
-        return {"result" : True}
-    
+        return {"result": True}
+
     def all_catogory_title(self):
-        self.cursor.execute("SELECT title FROM categories WHERE username=? ",("username", ))
+        self.cursor.execute("SELECT title FROM categories WHERE username=? ", ("username",))
         result = self.cursor.fetchall()
         return result
+
 
 def days_between_today_and_date(target_date):
     target_date = datetime.strptime(target_date, "%Y-%m-%d")
