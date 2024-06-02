@@ -13,10 +13,10 @@ class SignUpForm(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Sign Up Form')
+        self.setWindowTitle('Editing form')
         self.setWindowIcon(QIcon('add-user.png'))
         self.setGeometry(700, 100, 550, 500)
-        self.setFixedSize(580, 880)
+        self.setFixedSize(580, 780)
 
         font = QFont('Times New Roman', 12)
 
@@ -88,12 +88,9 @@ class SignUpForm(QWidget):
         self.username_input.setPlaceholderText("Enter your username")
         self.username_input.setMaxLength(20)
 
-        self.signup_button = QPushButton('Sign Up')
+        self.signup_button = QPushButton('CONFIRM')
         self.signup_button.clicked.connect(self.handle_signup)
         self.signup_button.setFixedWidth(200)
-
-        self.back_button = QPushButton('Back')
-        self.back_button.setFixedWidth(200)
 
         self.empty_label = QLabel('')
 
@@ -120,7 +117,6 @@ class SignUpForm(QWidget):
         layout.addRow(self.empty_label)
         layout.addRow(self.empty_label)
         layout.addWidget(self.signup_button)
-        layout.addWidget(self.back_button)
 
         self.setLayout(layout)
 
@@ -223,6 +219,7 @@ class SignUpForm(QWidget):
             if git.errors:
                 QMessageBox.warning(self, 'Error', "\n".join(git.errors))
             else:
+                self.hide()
                 git.data_manager.sign_up_user(person)
                 QMessageBox.information(self, 'Success', f'mission accomplished {first_name} {last_name}')
 

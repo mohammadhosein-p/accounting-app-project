@@ -1,10 +1,13 @@
 import sys
 from datetime import datetime, timedelta
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QCheckBox, QComboBox, QTableWidget, QTableWidgetItem, QFormLayout, QSpinBox, QMessageBox, QButtonGroup, QGridLayout, QRadioButton, QDateEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QCheckBox, \
+    QComboBox, QTableWidget, QTableWidgetItem, QFormLayout, QSpinBox, QMessageBox, QButtonGroup, QGridLayout, \
+    QRadioButton, QDateEdit
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QLocale, QDate
-from data_manager_class import *
+from git import *
 from css_properties import css_code
+
 
 class Reporting(QWidget):
     def __init__(self) -> None:
@@ -77,7 +80,7 @@ class Reporting(QWidget):
         self.price_start = QSpinBox()
         self.price_start.setMaximum(1000000000)
         self.grid.addWidget(self.price_start, 3, 1)
-        
+
         self.price_end = QSpinBox()
         self.price_end.setMaximum(1000000000)
         self.grid.addWidget(self.price_end, 4, 1)
@@ -124,6 +127,9 @@ class Reporting(QWidget):
         self.start_input.dateChanged.connect(self.set_minimum_date)
         self.submit_btn.clicked.connect(self.submit_form)
 
+        self.back_button = QPushButton('Back', self)
+        self.grid.addWidget(self.back_button, 16, 0, 1, 3)
+
     def default_mode(self):
         self.start_input.setVisible(False)
         self.start_date_label.setVisible(False)
@@ -132,7 +138,7 @@ class Reporting(QWidget):
         self.day_radio.setVisible(True)
         self.month_radio.setVisible(True)
         self.year_radio.setVisible(True)
-    
+
     def custom_mode(self):
         self.start_input.setVisible(True)
         self.start_date_label.setVisible(True)
@@ -170,7 +176,7 @@ class Reporting(QWidget):
         else:
             start_date = datetime.strptime(self.start_input.date().toString("yyyy-MM-dd"), "%Y-%m-%d")
             end_date = datetime.strptime(self.end_input.date().toString("yyyy-MM-dd"), "%Y-%m-%d")
-        
+
         min_price = self.price_start.value()
         max_price = self.price_end.value()
         record_type = "income" if self.income_radio.isChecked() else "expense"
@@ -201,6 +207,7 @@ class Reporting(QWidget):
             self.results_table.setItem(row_position, 3, QTableWidgetItem(str(record[3])))
             self.results_table.setItem(row_position, 4, QTableWidgetItem(record[4]))
             self.results_table.setItem(row_position, 5, QTableWidgetItem(record[5]))
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

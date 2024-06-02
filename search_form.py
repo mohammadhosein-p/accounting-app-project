@@ -25,6 +25,8 @@ class SearchFilterApp(QWidget):
         self.search_button = QPushButton('Search')
         self.search_button.clicked.connect(self.handle_search)
 
+        self.back_button = QPushButton('Back')
+
         self.day_checkbox = QCheckBox('Daily')
         self.month_checkbox = QCheckBox('Monthly')
         self.year_checkbox = QCheckBox('Yearly')
@@ -58,11 +60,13 @@ class SearchFilterApp(QWidget):
         self.results_table.setHorizontalHeaderLabels(
             ['Name', 'Amount', 'Date', 'source', 'Description', 'Type', 'Transaction type'])
 
-        # Layouts
         search_layout = QHBoxLayout()
         search_layout.addWidget(self.search_label)
         search_layout.addWidget(self.search_input)
         search_layout.addWidget(self.search_button)
+
+        back_layout = QHBoxLayout()
+        back_layout.addWidget(self.back_button)
 
         filter_layout = QHBoxLayout()
         filter_layout.addWidget(self.day_checkbox)
@@ -87,10 +91,12 @@ class SearchFilterApp(QWidget):
         main_layout.addLayout(amount_layout)
         main_layout.addLayout(field_layout)
         main_layout.addWidget(self.results_table)
+        main_layout.addLayout(back_layout)
 
         self.setLayout(main_layout)
 
         self.apply_stylesheet()
+
 
     def apply_stylesheet(self):
         self.setStyleSheet("""

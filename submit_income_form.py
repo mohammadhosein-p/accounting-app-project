@@ -1,10 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, \
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, \
     QFormLayout, QComboBox, QDateEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
-import data_manager_class
+import git
 from datetime import datetime
+
 today = datetime.today()
 qdate_today = QDate(today.year, today.month, today.day)
 
@@ -31,7 +32,8 @@ class RecordIncome(QWidget):
         self.source_label = QLabel('source of income :')
         self.source_label.setFont(font)
         self.source_input = QComboBox()
-        self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title()])
+        self.source_input.addItems(
+            ["source of income", "Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz", "Behshahr", "Karaj", "Rasht"])
         self.source_input.setStyleSheet("background-color:#E3FEF7")
 
         self.date_label = QLabel('date of income :')
@@ -61,6 +63,9 @@ class RecordIncome(QWidget):
         self.submit_button.clicked.connect(self.handle_submit)
         self.submit_button.setFixedWidth(200)
 
+        self.Back_button = QPushButton('Back')
+        self.Back_button.setFixedWidth(200)
+
         self.empty_label = QLabel('')
 
         layout = QFormLayout()
@@ -76,6 +81,7 @@ class RecordIncome(QWidget):
         layout.addRow(self.empty_label)
         layout.addRow(self.empty_label)
         layout.addWidget(self.submit_button)
+        layout.addWidget(self.Back_button)
         self.setLayout(layout)
 
         self.setStyleSheet("""
@@ -153,8 +159,8 @@ class RecordIncome(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your income has been registered')
-            transaction = data_manager_class.Record(record_type, "mehdi", income, date, source, description)
-            data_manager_class.accounting_manager.add_record(transaction)
+            transaction = git.Record(record_type, "mehdi", income, date, source, description, type)
+            git.accounting_manager.add_record(transaction)
 
 
 if __name__ == '__main__':

@@ -82,6 +82,10 @@ class LoginPage(QMainWindow):
         self.sign_up_btn.setFixedSize(100, 50)
         self.sign_up_btn.setFont(QFont("New Times Roman", 8))
 
+        self.back_btn = QPushButton("Back", self)
+        self.back_btn.setFixedSize(80, 50)
+        self.grid.addWidget(self.back_btn, 3, 3)
+
         self.grid.addWidget(self.sign_up_btn, 2, 1)
 
         self.forget_password_btn = QPushButton("Forget Password", self)

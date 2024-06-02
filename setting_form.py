@@ -2,11 +2,11 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
 import git
-import sign_up_form
+import editt
 from datetime import datetime
 
 
-class ButtonApp(QWidget):
+class Setting(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -28,6 +28,7 @@ class ButtonApp(QWidget):
         self.button5.clicked.connect(self.handle_Delete_income)
         self.button6 = QPushButton('Delete expense')
         self.button6.clicked.connect(self.handle_Delete_expense)
+        self.Back_btn = QPushButton('Back')
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.button1)
@@ -36,6 +37,7 @@ class ButtonApp(QWidget):
         main_layout.addWidget(self.button4)
         main_layout.addWidget(self.button5)
         main_layout.addWidget(self.button6)
+        main_layout.addWidget(self.Back_btn)
         main_layout.setSpacing(15)
 
         self.setLayout(main_layout)
@@ -75,12 +77,8 @@ class ButtonApp(QWidget):
         QMessageBox.information(self, 'Success', 'goodbye')
 
     def handle_editing_information(self):
-
         editor = git.accounting_manager.edit_information("mehdi")
-        self.ui = sign_up_form.SignUpForm()
-
-        self.ui.signup_button.setText("CONFIRM")
-        self.ui.setWindowTitle("Editing form")
+        self.ui = editt.SignUpForm()
 
         self.ui.first_name_input.setText(f"{editor[0][0]}")
         self.ui.last_name_input.setText(f"{editor[0][1]}")
@@ -111,6 +109,6 @@ class ButtonApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    button_app = ButtonApp()
+    button_app = Setting()
     button_app.show()
     sys.exit(app.exec_())
