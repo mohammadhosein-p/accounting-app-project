@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
-import git
+import data_manager_class
+from css_properties import css_code
 import editt
 from datetime import datetime
 
@@ -45,39 +46,17 @@ class Setting(QWidget):
         self.apply_stylesheet()
 
     def apply_stylesheet(self):
-        self.setStyleSheet("""
-            QWidget {
-                background: #003C43;
-                color: #E3FEF7;
-                font-family: 'Times New Roman';
-                font-size: 14px;
-            }
-            QPushButton {
-                background-color: #77B0AA;
-                color: white;
-                padding: 10px;
-                border-radius: 15px;
-                font-size: 24px;
-                font-family: 'Times New Roman';
-                box-shadow: 2px 2px 5px #000000;
-                margin: 5px 20px;
-            }
-            QPushButton:hover {
-                background-color: #E3FEF7;
-                color: #003C43;
-                border: 2px solid #77B0AA;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
     def handle_Change_the_theme(self):
         pass
 
     def handle_Delete_account(self):
-        git.accounting_manager.delete_account("mehdi")
+        data_manager_class.accounting_manager.delete_account("mehdi")
         QMessageBox.information(self, 'Success', 'goodbye')
 
     def handle_editing_information(self):
-        editor = git.accounting_manager.edit_information("mehdi")
+        editor = data_manager_class.accounting_manager.edit_information("mehdi")
         self.ui = editt.SignUpForm()
 
         self.ui.first_name_input.setText(f"{editor[0][0]}")
@@ -99,11 +78,11 @@ class Setting(QWidget):
         pass
 
     def handle_Delete_income(self):
-        git.accounting_manager.delete_records("mehdi", "income")
+        data_manager_class.accounting_manager.delete_records("mehdi", "income")
         QMessageBox.information(self, 'Success', 'Your revenue transactions have been deleted')
 
     def handle_Delete_expense(self):
-        git.accounting_manager.delete_records("mehdi", "expense")
+        data_manager_class.accounting_manager.delete_records("mehdi", "expense")
         QMessageBox.information(self, 'Success', 'Your paid transactions have been deleted')
 
 

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdi
 from PyQt5.QtGui import QFont, QPixmap
 from data_manager_class import *
 import sys
+from css_properties import css_code
 
 app = QApplication(sys.argv)
 
@@ -11,32 +12,7 @@ class LoginPage(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 400)
         self.setWindowTitle("Login Page")
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #003C43;
-            }
-            QLineEdit {
-                background-color: #77B0AA;
-                border: None;
-                border-radius: 20px;
-                padding: 10px;
-                font-size: 14px;
-                margin-right: 30px;
-                font-weight: bold;
-            }
-            QPushButton {
-                color: #77B0AA;
-                border: 1px solid #77B0AA;
-                border-radius: 25px;
-                font-weight: bold;
-                margin-right: 20px;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                color: #003C43;
-                background-color: #77B0AA;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)

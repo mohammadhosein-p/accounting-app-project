@@ -12,6 +12,7 @@ import setting_form
 import category_form_class
 import reporting_form
 import editt
+from css_properties import css_code
 
 app = QApplication(sys.argv)
 
@@ -21,23 +22,7 @@ class StartWindow(QWidget):
         super().__init__()
         self.setFixedSize(400, 300)
         self.setWindowTitle("Start Window")
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #003C43;  
-            }
-            QPushButton {
-                border: None;
-                background-color: #76ABAE; 
-                border-radius: 8px; 
-                color: #EEEEEE;
-                font-size: 18px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #EEEEEE;
-                color: #003C43;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
         self.label = QLabel("Welcome to the app!", self)
         self.label.setGeometry(80, 50, 280, 50)

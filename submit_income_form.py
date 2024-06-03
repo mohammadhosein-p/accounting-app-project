@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
     QFormLayout, QComboBox, QDateEdit
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
-import git
+import data_manager_class
 from datetime import datetime
+from css_properties import css_code
 
 today = datetime.today()
 qdate_today = QDate(today.year, today.month, today.day)
@@ -84,64 +85,7 @@ class RecordIncome(QWidget):
         layout.addWidget(self.Back_button)
         self.setLayout(layout)
 
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #003C43;
-            }
-            QLabel {
-                color: #E3FEF7;
-            }
-            QComboBox, QDateEdit {
-                border: 3px solid #135D66;
-                border-top-left-radius: 10px; border-bottom-left-radius: 10px;
-                padding: 5px;
-                background-color: #E3FEF7;
-            }
-            QLineEdit{
-                border: 3px solid #135D66;
-                border-radius: 10px;
-                padding: 5px;
-                background-color: #E3FEF7;
-            }
-            QLineEdit:focus, QComboBox:focus, QDateEdit:focus {
-                border: 3px solid red;
-            }
-            QPushButton {
-                background-color: #77B0AA;
-                color: white;
-                padding: 10px;
-                text-align: center;
-                margin: 4px 2px;
-                border-radius: 10px;
-                font-size: 20px;
-                font-weight: bold;
-                font-family: 'Times New Roman';
-            }
-            QPushButton:hover {
-                background-color: #EEEEEE;
-                color: #003C43;
-            }
-            QCalendarWidget QToolButton {
-                background-color: #003C43;
-                color: #003C43;
-                border: none;
-                border-radius: 5px;
-                padding: 5px;
-            }
-            QCalendarWidget QToolButton:hover {
-                background-color: #003C43;
-                color: #003C43;
-            }
-            QCalendarWidget QWidget {
-                background-color: #003C43;
-            }
-            QCalendarWidget QAbstractItemView:enabled {
-                color: #003C43;
-                background-color: #E3FEF7;
-                selection-background-color: #77B0AA;
-                selection-color: #FFFFFF;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
     def handle_submit(self):
         record_type = "income"
@@ -159,8 +103,8 @@ class RecordIncome(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your income has been registered')
-            transaction = git.Record(record_type, "mehdi", income, date, source, description, type)
-            git.accounting_manager.add_record(transaction)
+            transaction = data_manager_class.Record(record_type, "mehdi", income, date, source, description, type)
+            data_manager_class.accounting_manager.add_record(transaction)
 
 
 if __name__ == '__main__':

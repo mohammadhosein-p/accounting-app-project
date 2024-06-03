@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
     QRadioButton, QDateEdit
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QLocale, QDate
-from git import *
+from data_manager_class import *
 from css_properties import css_code
 
 

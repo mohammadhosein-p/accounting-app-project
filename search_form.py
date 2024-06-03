@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QLocale
 from math import inf
-import git
+import data_manager_class
+from css_properties import css_code
 
 
 class SearchFilterApp(QWidget):
@@ -99,55 +100,7 @@ class SearchFilterApp(QWidget):
 
 
     def apply_stylesheet(self):
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #003C43;
-                color: #E3FEF7;
-                font-family: 'Times New Roman';
-                font-size: 16px;
-            }
-            QLabel {
-                color: #E3FEF7;
-            }
-            QLineEdit, QComboBox, QSpinBox {
-                border: 2px solid #135D66;
-                border-radius: 10px;
-                padding: 5px;
-                background-color: #E3FEF7;
-                color: #003C43;
-            }
-            QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
-                border: 2px solid red;
-            }
-            QCheckBox {
-                padding: 5px;
-                color: #E3FEF7;
-            }
-            QPushButton {
-                background-color: #77B0AA;
-                color: white;
-                padding: 10px;
-                border-radius: 10px;
-                font-size: 16px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #E3FEF7;
-                color: #003C43;
-            }
-            QTableWidget {
-                background-color: #E3FEF7;
-                color: #003C43;
-                border: 2px solid #135D66;
-                border-radius: 10px;
-            }
-            QHeaderView::section {
-                background-color: #135D66;
-                color: #E3FEF7;
-                padding: 5px;
-                border: 1px solid #E3FEF7;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
     def handle_search(self):
         list_of_type = []
@@ -184,7 +137,7 @@ class SearchFilterApp(QWidget):
         elif is_yearly:
             time_limit = 365
 
-        search_object = git.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
+        search_object = data_manager_class.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
                                                          list_of_field, time_limit)
         if len(search_object) == 0:
             QMessageBox.warning(self, 'Error', 'This word not found')

@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import pandas as pd
 
 errors = []
 
@@ -199,6 +200,19 @@ class AccountingManager():
         self.cursor.execute("DELETE FROM users WHERE username = ?;", (username,))
         self.connection.commit()
         return information
+    
+    def export_account(self, user_name):
+        self.cursor.execute("SELECT * FROM accounting WHERE username=?", (user_name, ))
+        result = self.cursor.fetchall()
+        df = pd.DataFrame({
+            "amount": [row[1] for row in result],
+            "date": [row[2] for row in result],
+            "source": [row[2] for row in result],
+            "description": [row[3] for row in result],
+            "cost_type": [row[4] for row in result],
+            "type": [row[5] for row in result],
+        })
+        df.to_csv("./transaction.csv")
 
 
 class CategoryManager():

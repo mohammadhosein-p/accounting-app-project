@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
 from validator import Validator
-import git
+import data_manager_class
+from css_properties import css_code
 
 
 class SignUpForm(QWidget):
@@ -120,64 +121,7 @@ class SignUpForm(QWidget):
 
         self.setLayout(layout)
 
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #003C43;
-            }
-            QLabel {
-                color: #E3FEF7;
-            }
-            QComboBox, QDateEdit {
-                border: 3px solid #135D66;
-                border-top-left-radius: 10px; border-bottom-left-radius: 10px;
-                padding: 5px;
-                background-color: #E3FEF7;
-            }
-            QLineEdit{
-                border: 3px solid #135D66;
-                border-radius: 10px;
-                padding: 5px;
-                background-color: #E3FEF7;
-            }
-            QLineEdit:focus, QComboBox:focus, QDateEdit:focus {
-                border: 3px solid red;
-            }
-            QPushButton {
-                background-color: #77B0AA;
-                color: white;
-                padding: 10px;
-                text-align: center;
-                margin: 4px 2px;
-                border-radius: 10px;
-                font-size: 20px;
-                font-weight: bold;
-                font-family: 'Times New Roman';
-            }
-            QPushButton:hover {
-                background-color: #EEEEEE;
-                color: #003C43;
-            }
-            QCalendarWidget QToolButton {
-                background-color: #003C43;
-                color: #003C43;
-                border: none;
-                border-radius: 5px;
-                padding: 5px;
-            }
-            QCalendarWidget QToolButton:hover {
-                background-color: #003C43;
-                color: #003C43;
-            }
-            QCalendarWidget QWidget {
-                background-color: #003C43;
-            }
-            QCalendarWidget QAbstractItemView:enabled {
-                color: #003C43;
-                background-color: #E3FEF7;
-                selection-background-color: #77B0AA;
-                selection-color: #FFFFFF;
-            }
-        """)
+        self.setStyleSheet(css_code)
 
     def handle_signup(self):
         first_name = self.first_name_input.text()
@@ -214,13 +158,13 @@ class SignUpForm(QWidget):
             QMessageBox.warning(self, 'Error', 'Passwords do not match')
 
         else:
-            person = git.User(first_name, last_name, mobile, username, email, password, city, birthday, favorite_color)
-            git.data_manager.is_user_exist(person)
-            if git.errors:
-                QMessageBox.warning(self, 'Error', "\n".join(git.errors))
+            person = data_manager_class.User(first_name, last_name, mobile, username, email, password, city, birthday, favorite_color)
+            data_manager_class.data_manager.is_user_exist(person)
+            if data_manager_class.errors:
+                QMessageBox.warning(self, 'Error', "\n".join(data_manager_class.errors))
             else:
                 self.hide()
-                git.data_manager.sign_up_user(person)
+                data_manager_class.data_manager.sign_up_user(person)
                 QMessageBox.information(self, 'Success', f'mission accomplished {first_name} {last_name}')
 
 
