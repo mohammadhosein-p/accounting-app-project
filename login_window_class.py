@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdi
 from PyQt5.QtGui import QFont, QPixmap
 from data_manager_class import *
 import sys
-from css_properties import css_code
 
 app = QApplication(sys.argv)
 
@@ -13,7 +12,6 @@ class LoginPage(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 400)
         self.setWindowTitle("Login Page")
-        self.setStyleSheet(css_code)
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
         self.grid = QGridLayout(central_widget)
@@ -102,11 +100,11 @@ class LoginPage(QMainWindow):
         response = data_manager.log_in_user(
             User(username=self.user_name_input.text(), password=self.password_input.text()))
         if response["result"]:
-            QMessageBox.information(self, "Info", f"you logged in as:\n{response['user_info']}")
-            return True
+            QMessageBox.information(self, "Info", f"you logged in as:\n{response['user_info'][0]} {response['user_info'][1]}")
+            return response
         else:
             QMessageBox.warning(self, "Error", response["error"])
-            return False
+            return response
 
 
 if __name__ == "__main__":

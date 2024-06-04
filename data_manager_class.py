@@ -178,8 +178,8 @@ class AccountingManager():
         return secondary_filter
 
     def search_records(self, form_data):
-        self.cursor.execute(' SELECT * FROM accounting WHERE amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ',
-                            (form_data['min_price'], form_data['max_price'],
+        self.cursor.execute(' SELECT * FROM accounting WHERE username=? AND amount BETWEEN ? AND ? AND cost_type = ? AND type = ? ',
+                            (form_data["user"], form_data['min_price'], form_data['max_price'],
                              form_data['data_type'], form_data["record_type"]))
         records = self.cursor.fetchall()
         return [record for record in records if
@@ -237,8 +237,8 @@ class CategoryManager():
         self.connection.commit()
         return {"result": True}
 
-    def all_catogory_title(self):
-        self.cursor.execute("SELECT title FROM categories WHERE username=? ", ("username",))
+    def all_catogory_title(self, username):
+        self.cursor.execute("SELECT title FROM categories WHERE username=? ", (username,))
         result = self.cursor.fetchall()
         return result
 

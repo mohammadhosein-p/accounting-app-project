@@ -32,32 +32,6 @@ class Menu(QWidget):
         main_layout.setSpacing(15)
 
         self.setLayout(main_layout)
-        self.apply_stylesheet()
-
-    def apply_stylesheet(self):
-        self.setStyleSheet("""
-            QWidget {
-                background: #003C43;
-                color: #E3FEF7;
-                font-family: 'Times New Roman';
-                font-size: 14px;
-            }
-            QPushButton {
-                background-color: #77B0AA;
-                color: white;
-                padding: 10px;
-                border-radius: 15px;
-                font-size: 24px;
-                font-family: 'Times New Roman';
-                box-shadow: 2px 2px 5px #000000;
-                margin: 5px 20px;
-            }
-            QPushButton:hover {
-                background-color: #E3FEF7;
-                color: #003C43;
-                border: 2px solid #77B0AA;
-            }
-        """)
 
 
 if __name__ == '__main__':

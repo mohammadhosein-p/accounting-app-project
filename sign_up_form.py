@@ -5,8 +5,6 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
 from validator import Validator
 import data_manager_class
-from css_properties import css_code
-
 
 class SignUpForm(QWidget):
     def __init__(self):
@@ -125,7 +123,6 @@ class SignUpForm(QWidget):
 
         self.setLayout(layout)
 
-        self.setStyleSheet(css_code)
 
     def handle_signup(self):
         first_name = self.first_name_input.text()

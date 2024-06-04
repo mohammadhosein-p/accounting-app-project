@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QLocale, QDate
 from data_manager_class import *
-from css_properties import css_code
-
 
 class Reporting(QWidget):
     def __init__(self) -> None:
@@ -15,7 +13,6 @@ class Reporting(QWidget):
 
         self.setWindowTitle("Reporting Section")
         self.setGeometry(700, 200, 800, 600)
-        self.setStyleSheet(css_code)
 
         self.grid = QGridLayout(self)
 
@@ -184,6 +181,7 @@ class Reporting(QWidget):
 
         if start_date and end_date and min_price is not None and max_price is not None and record_type and data_type:
             form_data = {
+                "user": self.current_user,
                 'start_date': start_date,
                 'end_date': end_date,
                 'min_price': min_price,
@@ -208,6 +206,8 @@ class Reporting(QWidget):
             self.results_table.setItem(row_position, 4, QTableWidgetItem(record[4]))
             self.results_table.setItem(row_position, 5, QTableWidgetItem(record[5]))
 
+    def set_current_user(self, user):
+        self.current_user = user
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -2,7 +2,6 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
 import data_manager_class
-from css_properties import css_code
 import editt
 from datetime import datetime
 
@@ -20,7 +19,6 @@ class Setting(QWidget):
         self.button1 = QPushButton('Change the theme')
         self.button1.clicked.connect(self.handle_Change_the_theme)
         self.button2 = QPushButton('Delete account')
-        self.button2.clicked.connect(self.handle_Delete_account)
         self.button3 = QPushButton('editing information')
         self.button3.clicked.connect(self.handle_editing_information)
         self.button4 = QPushButton('excavating information')
@@ -43,20 +41,15 @@ class Setting(QWidget):
 
         self.setLayout(main_layout)
 
-        self.apply_stylesheet()
-
-    def apply_stylesheet(self):
-        self.setStyleSheet(css_code)
-
     def handle_Change_the_theme(self):
         pass
 
     def handle_Delete_account(self):
-        data_manager_class.accounting_manager.delete_account("mehdi")
+        data_manager_class.accounting_manager.delete_account(self.current_user)
         QMessageBox.information(self, 'Success', 'goodbye')
 
     def handle_editing_information(self):
-        editor = data_manager_class.accounting_manager.edit_information("mehdi")
+        editor = data_manager_class.accounting_manager.edit_information(self.current_user)
         self.ui = editt.SignUpForm()
 
         self.ui.first_name_input.setText(f"{editor[0][0]}")
@@ -78,13 +71,15 @@ class Setting(QWidget):
         pass
 
     def handle_Delete_income(self):
-        data_manager_class.accounting_manager.delete_records("mehdi", "income")
+        data_manager_class.accounting_manager.delete_records(self.current_user, "income")
         QMessageBox.information(self, 'Success', 'Your revenue transactions have been deleted')
 
     def handle_Delete_expense(self):
-        data_manager_class.accounting_manager.delete_records("mehdi", "expense")
+        data_manager_class.accounting_manager.delete_records(self.current_user, "expense")
         QMessageBox.information(self, 'Success', 'Your paid transactions have been deleted')
 
+    def set_current_user(self, user):
+        self.current_user = user
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

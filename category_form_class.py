@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdi
     QMessageBox, QRadioButton, QTextEdit, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QFont, QPixmap
 from data_manager_class import *
-from css_properties import css_code
 import sys
 
 app = QApplication(sys.argv)
@@ -14,8 +13,6 @@ class Category(QMainWindow):
         self.setWindowTitle('Category Form')
         self.setGeometry(700, 200, 550, 500)
         self.setFixedSize(500, 400)
-
-        self.setStyleSheet(css_code)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
@@ -89,8 +86,7 @@ class Category(QMainWindow):
         self.describtion_text_edit.setReadOnly(False)
 
     def insert_data(self):
-        # نام کاربری تغییر داده شود
-        result = category_manager.add_category("username", self.title_line_edit.text(),
+        result = category_manager.add_category(self.current_user, self.title_line_edit.text(),
                                                self.describtion_text_edit.toPlainText())
         if result['result']:
             QMessageBox.information(self, "success", "category added successfuly")
@@ -111,7 +107,9 @@ class Category(QMainWindow):
             QMessageBox.information(self, "success", "category found successfuly")
         else:
             QMessageBox.warning(self, "Error", "there was an error")
-
+ 
+    def set_current_user(self, user):
+        self.current_user = user
 
 if __name__ == "__main__":
     window = Category()

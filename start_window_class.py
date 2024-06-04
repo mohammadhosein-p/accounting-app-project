@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QLabel, QPushButton, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QLabel, QPushButton, QHBoxLayout, QGridLayout
 from PyQt5.QtGui import QFont
 import sys
 import login_window_class
@@ -12,7 +12,7 @@ import setting_form
 import category_form_class
 import reporting_form
 import editt
-from css_properties import css_code
+import css_properties
 
 app = QApplication(sys.argv)
 
@@ -20,28 +20,25 @@ app = QApplication(sys.argv)
 class StartWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.theme_changer = css_properties.ThemeChanger()
         self.setFixedSize(400, 300)
         self.setWindowTitle("Start Window")
-        self.setStyleSheet(css_code)
+        self.setStyleSheet(self.theme_changer.generate_css_code())
 
+        self.grid = QGridLayout(self)
         self.label = QLabel("Welcome to the app!", self)
-        self.label.setGeometry(80, 50, 280, 50)
-        self.label.setFont(QFont("Times New Roman", 18))
-        self.label.setStyleSheet("color: #EEEEEE;")
-        self.hbox = QHBoxLayout(self)
+        self.label.setStyleSheet("color: white; font-size: 40px;")
+        self.grid.addWidget(self.label, 0, 0, 0, 2)
+
 
         self.login_btn = QPushButton("Login", self)
-        self.login_btn.setFixedSize(100, 35)
-        self.login_btn.setFont(QFont("Times New Roman", 14))
+        self.setStyleSheet(self.theme_changer.generate_css_code())
+        self.grid.addWidget(self.login_btn, 1, 0)
 
         self.sign_up_btn = QPushButton("Sign Up", self)
-        self.sign_up_btn.setFixedSize(100, 35)
-        self.sign_up_btn.setFont(QFont("Times New Roman", 14))
+        self.sign_up_btn.setStyleSheet(self.theme_changer.generate_css_code())
+        self.grid.addWidget(self.sign_up_btn, 1, 1)
 
-        self.hbox.addWidget(self.login_btn)
-        self.hbox.addWidget(self.sign_up_btn)
-
-        # -----------------------------------------------MANAGING------------------------------------- #
 
         self.sign_up = sign_up_form.SignUpForm()
         self.login = login_window_class.LoginPage()
@@ -69,6 +66,7 @@ class StartWindow(QWidget):
         self.menu.category_btn.clicked.connect(self.go_to_category)
         self.menu.account_inquiry_btn.clicked.connect(self.go_to_inquiry)
         self.menu.setting_btn.clicked.connect(self.go_to_setting)
+        self.menu.exit_btn.clicked.connect(exit)
 
         self.income.Back_button.clicked.connect(self.back_from_income)
         self.expense.Back_button.clicked.connect(self.back_from_expense)
@@ -77,6 +75,16 @@ class StartWindow(QWidget):
         self.report.back_button.clicked.connect(self.back_from_inquiry)
         self.setting.Back_btn.clicked.connect(self.back_from_setting)
 
+        self.setting.button2.clicked.connect(self.delete_account)
+        self.setting.button1.clicked.connect(self.go_to_theme_changer)
+        self.theme_changer.back_btn.clicked.connect(self.back_from_theme_changer)
+
+        self.apply_styles()
+
+    def delete_account(self):
+        self.setting.handle_Delete_account()
+        self.setting.close()
+        self.show()
 
     def create_sign_up_page(self):
         self.hide()
@@ -95,32 +103,49 @@ class StartWindow(QWidget):
         self.show()
 
     def go_to_menu_from_login(self):
-        if self.login.login_check():
+        response = self.login.login_check()
+        if response['result']:
+            self.current_user = response["user_info"]
             self.login.hide()
             self.menu.show()
 
+    def go_to_theme_changer(self):
+        self.setting.hide()
+        self.theme_changer.show()
+    
+    def back_from_theme_changer(self):
+        self.apply_styles()
+        self.theme_changer.hide()
+        self.setting.show()
+
     def go_to_income(self):
         self.menu.hide()
+        self.income.set_current_user(self.current_user[3])
         self.income.show()
 
     def go_to_expense(self):
         self.menu.hide()
+        self.expense.set_current_user(self.current_user[3])
         self.expense.show()
 
     def go_to_search(self):
         self.menu.hide()
+        self.search.set_current_user(self.current_user[3])
         self.search.show()
 
     def go_to_category(self):
         self.menu.hide()
+        self.category.set_current_user(self.current_user[3])
         self.category.show()
 
     def go_to_inquiry(self):
         self.menu.hide()
+        self.report.set_current_user(self.current_user[3])
         self.report.show()
 
     def go_to_setting(self):
         self.menu.hide()
+        self.setting.set_current_user(self.current_user[3])
         self.setting.show()
 
     def back_from_income(self):
@@ -150,6 +175,21 @@ class StartWindow(QWidget):
     def go_to_sign_from_login(self):
         self.login.hide()
         self.sign_up.show()
+
+    def apply_styles(self):
+        css = self.theme_changer.generate_css_code()
+        self.setStyleSheet(css)
+        self.sign_up.setStyleSheet(css)
+        self.login.setStyleSheet(css)
+        self.menu.setStyleSheet(css)
+        self.income.setStyleSheet(css)
+        self.expense.setStyleSheet(css)
+        self.search.setStyleSheet(css)
+        self.setting.setStyleSheet(css)
+        self.category.setStyleSheet(css)
+        self.report.setStyleSheet(css)
+        self.edit.setStyleSheet(css)
+
 
 
 

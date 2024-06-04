@@ -5,7 +5,6 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
 import data_manager_class
 from datetime import datetime
-from css_properties import css_code
 
 today = datetime.today()
 qdate_today = QDate(today.year, today.month, today.day)
@@ -13,6 +12,7 @@ qdate_today = QDate(today.year, today.month, today.day)
 
 class RecordIncome(QWidget):
     def __init__(self):
+        self.current_user = ""
         super().__init__()
         self.initUI()
 
@@ -33,8 +33,7 @@ class RecordIncome(QWidget):
         self.source_label = QLabel('source of income :')
         self.source_label.setFont(font)
         self.source_input = QComboBox()
-        self.source_input.addItems(
-            ["source of income", "Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz", "Behshahr", "Karaj", "Rasht"])
+        self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title(self.current_user)])
         self.source_input.setStyleSheet("background-color:#E3FEF7")
 
         self.date_label = QLabel('date of income :')
@@ -57,7 +56,7 @@ class RecordIncome(QWidget):
         self.type_label.setFont(font)
         self.type_input = QComboBox()
         self.type_input.addItems(
-            ["Type of income", "Cash", "Digital currency", "Cheque"])
+            ["Cash", "Digital currency", "Cheque"])
         self.type_input.setStyleSheet("background-color:#E3FEF7")
 
         self.submit_button = QPushButton('Submit')
@@ -85,7 +84,6 @@ class RecordIncome(QWidget):
         layout.addWidget(self.Back_button)
         self.setLayout(layout)
 
-        self.setStyleSheet(css_code)
 
     def handle_submit(self):
         record_type = "income"
@@ -103,8 +101,11 @@ class RecordIncome(QWidget):
 
         else:
             QMessageBox.information(self, 'Success', 'Your income has been registered')
-            transaction = data_manager_class.Record(record_type, "mehdi", income, date, source, description, type)
+            transaction = data_manager_class.Record(record_type, self.current_user, income, date, source, description, type)
             data_manager_class.accounting_manager.add_record(transaction)
+
+    def set_current_user(self, user):
+        self.current_user = user
 
 
 if __name__ == '__main__':

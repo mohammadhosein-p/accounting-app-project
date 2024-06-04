@@ -5,8 +5,6 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QLocale
 from math import inf
 import data_manager_class
-from css_properties import css_code
-
 
 class SearchFilterApp(QWidget):
     def __init__(self):
@@ -96,11 +94,6 @@ class SearchFilterApp(QWidget):
 
         self.setLayout(main_layout)
 
-        self.apply_stylesheet()
-
-
-    def apply_stylesheet(self):
-        self.setStyleSheet(css_code)
 
     def handle_search(self):
         list_of_type = []
@@ -137,7 +130,7 @@ class SearchFilterApp(QWidget):
         elif is_yearly:
             time_limit = 365
 
-        search_object = data_manager_class.accounting_manager.searching("mehdi", search_term, min_amount, max_amount, list_of_type,
+        search_object = data_manager_class.accounting_manager.searching(self.current_useer, search_term, min_amount, max_amount, list_of_type,
                                                          list_of_field, time_limit)
         if len(search_object) == 0:
             QMessageBox.warning(self, 'Error', 'This word not found')
@@ -149,6 +142,9 @@ class SearchFilterApp(QWidget):
         for row_idx, row_data in enumerate(results):
             for col_idx, item in enumerate(row_data):
                 self.results_table.setItem(row_idx, col_idx, QTableWidgetItem(str(item)))
+
+    def set_current_user(self, user):
+        self.current_useer = user
 
 
 if __name__ == '__main__':
