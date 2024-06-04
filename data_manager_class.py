@@ -238,7 +238,7 @@ class CategoryManager():
         return {"result": True}
 
     def all_catogory_title(self, username):
-        self.cursor.execute("SELECT title FROM categories WHERE username=? ", (username,))
+        self.cursor.execute("SELECT * FROM categories WHERE username=? ", (username, ))
         result = self.cursor.fetchall()
         return result
 

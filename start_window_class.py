@@ -78,6 +78,7 @@ class StartWindow(QWidget):
         self.setting.button2.clicked.connect(self.delete_account)
         self.setting.button1.clicked.connect(self.go_to_theme_changer)
         self.theme_changer.back_btn.clicked.connect(self.back_from_theme_changer)
+        self.setting.button3.clicked.connect(self.apply_styles_to_edit)
 
         self.apply_styles()
 
@@ -121,11 +122,13 @@ class StartWindow(QWidget):
     def go_to_income(self):
         self.menu.hide()
         self.income.set_current_user(self.current_user[3])
+        self.income.add_categories()
         self.income.show()
 
     def go_to_expense(self):
         self.menu.hide()
         self.expense.set_current_user(self.current_user[3])
+        self.expense.add_categories()
         self.expense.show()
 
     def go_to_search(self):
@@ -190,6 +193,9 @@ class StartWindow(QWidget):
         self.report.setStyleSheet(css)
         self.edit.setStyleSheet(css)
 
+    def apply_styles_to_edit(self):
+        css = self.theme_changer.generate_css_code()
+        self.setting.ui.setStyleSheet(css)
 
 
 

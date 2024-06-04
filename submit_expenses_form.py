@@ -32,7 +32,7 @@ class RecordExpenses(QWidget):
         self.source_label.setFont(font)
         self.source_input = QComboBox()
         print(self.current_user)
-        self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title(self.current_user)])
+        # self.source_input.addItems([category[0] for category in data_manager_class.category_manager.all_catogory_title(self.current_user)])
         self.source_input.setStyleSheet("background-color:#E3FEF7")
 
         self.date_label = QLabel('date of expenses :')
@@ -82,6 +82,9 @@ class RecordExpenses(QWidget):
         layout.addWidget(self.submit_button)
         layout.addWidget(self.Back_button)
         self.setLayout(layout)
+
+    def add_categories(self):
+        self.source_input.addItems([category[1] for category in data_manager_class.category_manager.all_catogory_title(self.current_user)])
 
 
     def handle_submit(self):

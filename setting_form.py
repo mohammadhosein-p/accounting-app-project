@@ -17,11 +17,10 @@ class Setting(QWidget):
         self.setFixedSize(400, 500)
 
         self.button1 = QPushButton('Change the theme')
-        self.button1.clicked.connect(self.handle_Change_the_theme)
         self.button2 = QPushButton('Delete account')
-        self.button3 = QPushButton('editing information')
+        self.button3 = QPushButton('Edit information')
         self.button3.clicked.connect(self.handle_editing_information)
-        self.button4 = QPushButton('excavating information')
+        self.button4 = QPushButton('Export information')
         self.button4.clicked.connect(self.handle_excavating_information)
         self.button5 = QPushButton('Delete income')
         self.button5.clicked.connect(self.handle_Delete_income)
@@ -40,9 +39,6 @@ class Setting(QWidget):
         main_layout.setSpacing(15)
 
         self.setLayout(main_layout)
-
-    def handle_Change_the_theme(self):
-        pass
 
     def handle_Delete_account(self):
         data_manager_class.accounting_manager.delete_account(self.current_user)
@@ -68,7 +64,8 @@ class Setting(QWidget):
         self.ui.show()
 
     def handle_excavating_information(self):
-        pass
+        data_manager_class.accounting_manager.export_account(self.current_user)
+        QMessageBox.information(self, 'Success', 'Your transaction exported as transaction.csv')
 
     def handle_Delete_income(self):
         data_manager_class.accounting_manager.delete_records(self.current_user, "income")
