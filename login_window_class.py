@@ -7,13 +7,13 @@ from css_properties import css_code
 
 app = QApplication(sys.argv)
 
+
 class LoginPage(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(600, 400)
         self.setWindowTitle("Login Page")
         self.setStyleSheet(css_code)
-
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
         self.grid = QGridLayout(central_widget)
@@ -22,7 +22,7 @@ class LoginPage(QMainWindow):
         self.user_name_label.setFont(QFont("New Times Roman", 14))
         self.user_name_label.setStyleSheet("color: #E3FEF7; margin: 0 50px 0 20px")
         self.grid.addWidget(self.user_name_label, 0, 0)
-        
+
         self.user_name_input = QLineEdit(self)
         self.user_name_input.setFont(QFont("New Times Roman", 14))
         self.user_name_input.setPlaceholderText("Username")
@@ -81,38 +81,35 @@ class LoginPage(QMainWindow):
         self.grid.addWidget(self.security_question_input, 3, 2)
         self.security_question_input.setVisible(False)
 
-
         self.forget_password_btn.clicked.connect(self.show_security_question)
-        self.submit_btn.clicked.connect(self.login_check)
-        self.sign_up_btn.clicked.connect(self.create_sign_up_window)
-
 
     def show_security_question(self):
         self.security_question_input.setVisible(True)
         self.security_question_label.setVisible(True)
         self.forget_password_btn.setText("Check Password")
         self.forget_password_btn.clicked.connect(self.forget_password_check)
-    
+
     def forget_password_check(self):
-        response = data_manager.find_password(User(username=self.user_name_input.text(), security=self.security_question_input.text()))
+        response = data_manager.find_password(
+            User(username=self.user_name_input.text(), security=self.security_question_input.text()))
         if response['result']:
             QMessageBox.information(self, "Info", "your password added")
             self.password_input.setText(response['password'])
         else:
             QMessageBox.warning(self, "Error", response["error"])
 
-
     def login_check(self):
-        response = data_manager.log_in_user(User(username=self.user_name_input.text(), password=self.password_input.text()))
+        response = data_manager.log_in_user(
+            User(username=self.user_name_input.text(), password=self.password_input.text()))
         if response["result"]:
             QMessageBox.information(self, "Info", f"you logged in as:\n{response['user_info']}")
+            return True
         else:
             QMessageBox.warning(self, "Error", response["error"])
+            return False
 
-    def create_sign_up_window(self):
-        print("SignUp")
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     data_manager = DataManager()
     window = LoginPage()
     window.show()

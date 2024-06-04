@@ -61,6 +61,7 @@ class StartWindow(QWidget):
 
         self.login.back_btn.clicked.connect(self.back_from_login)
         self.login.submit_btn.clicked.connect(self.go_to_menu_from_login)
+        self.login.sign_up_btn.clicked.connect(self.go_to_sign_from_login)
 
         self.menu.record_income_btn.clicked.connect(self.go_to_income)
         self.menu.record_expense_btn.clicked.connect(self.go_to_expense)
@@ -94,8 +95,9 @@ class StartWindow(QWidget):
         self.show()
 
     def go_to_menu_from_login(self):
-        self.login.hide()
-        self.menu.show()
+        if self.login.login_check():
+            self.login.hide()
+            self.menu.show()
 
     def go_to_income(self):
         self.menu.hide()
@@ -144,6 +146,10 @@ class StartWindow(QWidget):
     def back_from_inquiry(self):
         self.report.hide()
         self.menu.show()
+
+    def go_to_sign_from_login(self):
+        self.login.hide()
+        self.sign_up.show()
 
 
 
