@@ -21,9 +21,10 @@ class StartWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.theme_changer = css_properties.ThemeChanger()
+        self.font_changer = css_properties.FontChanger()
         self.setFixedSize(400, 300)
         self.setWindowTitle("Start Window")
-        self.setStyleSheet(self.theme_changer.generate_css_code())
+        self.setStyleSheet(css_properties.generate_css_code())
 
         self.grid = QGridLayout(self)
         self.label = QLabel("Welcome to the app!", self)
@@ -32,11 +33,11 @@ class StartWindow(QWidget):
 
 
         self.login_btn = QPushButton("Login", self)
-        self.setStyleSheet(self.theme_changer.generate_css_code())
+        self.setStyleSheet(css_properties.generate_css_code())
         self.grid.addWidget(self.login_btn, 1, 0)
 
         self.sign_up_btn = QPushButton("Sign Up", self)
-        self.sign_up_btn.setStyleSheet(self.theme_changer.generate_css_code())
+        self.sign_up_btn.setStyleSheet(css_properties.generate_css_code())
         self.grid.addWidget(self.sign_up_btn, 1, 1)
 
 
@@ -75,10 +76,12 @@ class StartWindow(QWidget):
         self.report.back_button.clicked.connect(self.back_from_inquiry)
         self.setting.Back_btn.clicked.connect(self.back_from_setting)
 
-        self.setting.button2.clicked.connect(self.delete_account)
+        self.setting.button3.clicked.connect(self.delete_account)
         self.setting.button1.clicked.connect(self.go_to_theme_changer)
+        self.setting.button2.clicked.connect(self.go_to_font_changer)
         self.theme_changer.back_btn.clicked.connect(self.back_from_theme_changer)
-        self.setting.button3.clicked.connect(self.apply_styles_to_edit)
+        self.font_changer.confirm_button.clicked.connect(self.back_from_font_changer)
+        self.setting.button4.clicked.connect(self.apply_styles_to_edit)
 
         self.apply_styles()
 
@@ -180,7 +183,11 @@ class StartWindow(QWidget):
         self.sign_up.show()
 
     def apply_styles(self):
-        css = self.theme_changer.generate_css_code()
+        css = css_properties.generate_css_code(
+            using_palette=self.theme_changer.using_palette,
+            font_family=self.font_changer.font_family,
+            font_size=self.font_changer.font_size
+            )
         self.setStyleSheet(css)
         self.sign_up.setStyleSheet(css)
         self.login.setStyleSheet(css)
@@ -192,10 +199,20 @@ class StartWindow(QWidget):
         self.category.setStyleSheet(css)
         self.report.setStyleSheet(css)
         self.edit.setStyleSheet(css)
+        self.font_changer.setStyleSheet(css)
 
     def apply_styles_to_edit(self):
-        css = self.theme_changer.generate_css_code()
+        css = css_properties.generate_css_code()
         self.setting.ui.setStyleSheet(css)
+    
+    def go_to_font_changer(self):
+        self.setting.hide()
+        self.font_changer.show()
+
+    def back_from_font_changer(self):
+        self.apply_styles()
+        self.font_changer.hide()
+        self.setting.show()
 
 
 
