@@ -212,7 +212,7 @@ class AccountingManager():
             "cost_type": [row[4] for row in result],
             "type": [row[5] for row in result],
         })
-        df.to_csv("./transaction.csv")
+        df.to_csv("./data/transaction.csv")
 
 
 class CategoryManager():
@@ -249,20 +249,6 @@ def days_between_today_and_date(target_date):
     delta = today_date - target_date
     return delta.days
 
-
 data_manager = DataManager()
 accounting_manager = AccountingManager(data_manager.connection)
 category_manager = CategoryManager(data_manager)
-
-# test commands
-# data_manager.sign_up_user(User("a", "b", "091521", "as", "asd", "qwerty", "asd", "asdf", "qe"))
-# print(data_manager.find_password(User(username="as", security="qe")))
-# print(data_manager.is_user_exist(User(phone="09", username="a", email="asd")))
-# print(data_manager.log_in_user(User(username="as", password="qwerty")))
-# accounting_manager = AccountingManager(data_manager.connection)
-# data_manager.sign_up_user(
-#     User("ali", "Doe", "09152541", "alidoe", "johrerg", "password123", "sdfg", "1990-01-01", "sdfvcx"))
-# accounting_manager.add_record(
-#     Record(username="alidoe", amount=1000.0, date="2024-05-28", source="salary", description="fhnfnfd",
-#            record_type="income"))
-# print(accounting_manager.get_records_by_user("alidoe"))

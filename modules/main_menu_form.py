@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
 
@@ -10,7 +10,7 @@ class Menu(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Main_Menu')
-        self.setWindowIcon(QIcon('menu.png'))
+        self.setWindowIcon(QIcon('../source/menu.png'))
         self.setFixedSize(400, 500)
 
         self.record_income_btn = QPushButton('Record income')

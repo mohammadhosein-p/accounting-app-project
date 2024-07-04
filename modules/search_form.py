@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QLocale
 from math import inf
-import data_manager_class
+import modules.data_manager_class as data_manager_class
 
 class SearchFilterApp(QWidget):
     def __init__(self):
@@ -14,7 +14,7 @@ class SearchFilterApp(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Search and Filter')
-        self.setWindowIcon(QIcon('search.png'))
+        self.setWindowIcon(QIcon('../source/search.png'))
         self.setGeometry(700, 200, 800, 600)
 
         self.search_label = QLabel('Search:')

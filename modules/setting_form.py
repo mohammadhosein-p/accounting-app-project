@@ -1,8 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
-import data_manager_class
-import editt
+import modules.data_manager_class as data_manager_class
+import modules.edit_info as edit_info
 from datetime import datetime
 
 
@@ -13,7 +13,7 @@ class Setting(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Setting')
-        self.setWindowIcon(QIcon('setting.png'))
+        self.setWindowIcon(QIcon('../source/setting.png'))
         self.setFixedSize(400, 500)
 
         self.button1 = QPushButton('Change the theme')
@@ -46,7 +46,7 @@ class Setting(QWidget):
 
     def handle_editing_information(self):
         editor = data_manager_class.accounting_manager.edit_information(self.current_user)
-        self.ui = editt.SignUpForm()
+        self.ui = edit_info.SignUpForm()
 
         self.ui.first_name_input.setText(f"{editor[0][0]}")
         self.ui.last_name_input.setText(f"{editor[0][1]}")

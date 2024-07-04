@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdit, QGridLayout, QPushButton, \
     QMessageBox, QRadioButton, QTextEdit, QSpacerItem, QSizePolicy
-from PyQt5.QtGui import QFont, QPixmap
-from data_manager_class import *
+from PyQt5.QtGui import QFont, QIcon
+from modules.data_manager_class import *
 import sys
 
 app = QApplication(sys.argv)
@@ -11,6 +11,7 @@ class Category(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle('Category Form')
+        self.setWindowIcon(QIcon('../source/growth.png'))
         self.setGeometry(700, 200, 550, 500)
         self.setFixedSize(500, 400)
 
@@ -104,7 +105,7 @@ class Category(QMainWindow):
     def edit_data(self):
         result = category_manager.edit_category(self.title_line_edit.text(), self.describtion_text_edit.toPlainText())
         if result['result']:
-            QMessageBox.information(self, "success", "category found successfuly")
+            QMessageBox.information(self, "success", "category edited successfuly")
         else:
             QMessageBox.warning(self, "Error", "there was an error")
  

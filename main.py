@@ -2,17 +2,17 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QLabel, QPushButton, QHBoxLayout, QGridLayout
 from PyQt5.QtGui import QFont
 import sys
-import login_window_class
-import sign_up_form
-import main_menu_form
-import search_form
-import submit_income_form
-import submit_expenses_form
-import setting_form
-import category_form_class
-import reporting_form
-import editt
-import css_properties
+import modules.login_window_class as login_window_class
+import modules.sign_up_form as sign_up_form
+import modules.main_menu_form as main_menu_form
+import modules.search_form as search_form
+import modules.submit_income_form as submit_income_form
+import modules.submit_expenses_form as submit_expenses_form
+import modules.setting_form as setting_form
+import modules.category_form_class as category_form_class
+import modules.reporting_form as reporting_form
+import modules.edit_info as edit_info
+import modules.css_properties as css_properties
 
 app = QApplication(sys.argv)
 
@@ -49,7 +49,7 @@ class StartWindow(QWidget):
         self.setting = setting_form.Setting()
         self.category = category_form_class.Category()
         self.report = reporting_form.Reporting()
-        self.edit = editt.SignUpForm()
+        self.edit = edit_info.SignUpForm()
 
         self.sign_up_btn.clicked.connect(self.create_sign_up_page)
         self.login_btn.clicked.connect(self.create_login_page)

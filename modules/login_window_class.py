@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QLineEdit, QGridLayout, QPushButton, QMessageBox
-from PyQt5.QtGui import QFont, QPixmap
-from data_manager_class import *
+from PyQt5.QtGui import QFont, QIcon
+from modules.data_manager_class import *
 import sys
 
 app = QApplication(sys.argv)
@@ -12,6 +12,8 @@ class LoginPage(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 400)
         self.setWindowTitle("Login Page")
+        self.setWindowIcon(QIcon('../source/add-user.png'))
+
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
         self.grid = QGridLayout(central_widget)

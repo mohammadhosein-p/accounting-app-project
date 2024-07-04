@@ -1,17 +1,18 @@
 import sys
 from datetime import datetime, timedelta
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QCheckBox, \
-    QComboBox, QTableWidget, QTableWidgetItem, QFormLayout, QSpinBox, QMessageBox, QButtonGroup, QGridLayout, \
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, \
+    QComboBox, QTableWidget, QTableWidgetItem, QSpinBox, QMessageBox, QButtonGroup, QGridLayout, \
     QRadioButton, QDateEdit
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QLocale, QDate
-from data_manager_class import *
+from modules.data_manager_class import *
 
 class Reporting(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("Reporting Section")
+        self.setWindowIcon(QIcon('../source/expense.png'))
         self.setGeometry(700, 200, 800, 600)
 
         self.grid = QGridLayout(self)
@@ -211,8 +212,6 @@ class Reporting(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    # data_manager = DataManager()
-    # accounting_manager = AccountingManager(data_manager)
     window = Reporting()
     window.show()
     sys.exit(app.exec_())

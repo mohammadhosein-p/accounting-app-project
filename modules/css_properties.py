@@ -8,8 +8,7 @@ class ThemeChanger(QWidget):
         self.palette_1 = ["#003C43", "#135D66", "#77B0AA", "#E3FEF7"]
         self.palette_2 = ["#112D4E", "#DBE2EF", "#3F72AF", "#F9F7F7"]
         self.palette_3 = ["#E1F0DA", "#D4E7C5", "#BFD8AF", "#99BC85"]
-        self.using_palette = self.palette_1  # Initialize using_palette
-
+        self.using_palette = self.palette_1 
         self.initUI()
 
     def initUI(self):
@@ -38,15 +37,15 @@ class ThemeChanger(QWidget):
         
     def change_to_theme1(self):
         self.using_palette = self.palette_1
-        self.apply_stylesheet()  # Apply the new stylesheet
+        self.apply_stylesheet()
 
     def change_to_theme2(self):
         self.using_palette = self.palette_2
-        self.apply_stylesheet()  # Apply the new stylesheet
+        self.apply_stylesheet()
         
     def change_to_theme3(self):
         self.using_palette = self.palette_3
-        self.apply_stylesheet()  # Apply the new stylesheet
+        self.apply_stylesheet()
 
     def apply_stylesheet(self):
         self.setStyleSheet(self.generate_css_code())
@@ -140,7 +139,7 @@ class ThemeChanger(QWidget):
                     }}
                     QCalendarWidget QToolButton {{
                         background-color: {self.using_palette[0]};
-                        color: {self.using_palette[3]};
+                        color: black;
                         border: none;
                         border-radius: 5px;
                         padding: 5px;
